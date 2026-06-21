@@ -1,0 +1,19 @@
+Self-hosted bot by Core
+
+This installer sets up the desktop control panel and bundled runtime for the
+self-hosted Discord bot.
+
+What is included:
+- Desktop control panel for token, server, channel, command, and warning settings.
+- Local SQLite storage, no MongoDB requirement.
+- Start, restart, stop, emergency stop, and live log view.
+- Guild command registration and moderation tools.
+
+After installation:
+1. Open Self-hosted bot by Core.
+2. Paste your Discord bot token, bot ID, server ID, and log channel IDs.
+3. Press Save.
+4. Press Start.
+
+Community:
+https://discord.gg/YF8krDPCZh

@@ -1,0 +1,23 @@
+{
+  "timezone": "Europe/Berlin",
+  "weekly": [
+    {
+      "days": [1, 2, 3, 4, 5],
+      "mode": "open",
+      "open": "08:00",
+      "close": "22:00"
+    },
+    {
+      "days": [6],
+      "mode": "limited",
+      "open": "11:00",
+      "close": "23:00"
+    },
+    {
+      "days": [0],
+      "mode": "emergency",
+      "open": "11:00",
+      "close": "22:00"
+    }
+  ]
+}

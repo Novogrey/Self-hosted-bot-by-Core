@@ -1,0 +1,91 @@
+{
+  "name": "core-discord-bot",
+  "version": "1.0.6",
+  "description": "Self-hosted Discord bot by Core with a desktop control panel.",
+  "main": "desktop/main.js",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "scripts": {
+    "start": "node bot.js",
+    "bot": "node bot.js",
+    "app": "electron .",
+    "assets:installer": "node scripts/generate-installer-assets.js",
+    "dist": "npm run assets:installer && electron-builder --win && node scripts/organize-dist-artifacts.js",
+    "check": "node --check bot.js && node --check desktop/main.js && node --check desktop/preload.js && node --check desktop/renderer/app.js"
+  },
+  "private": true,
+  "dependencies": {
+    "@discordjs/rest": "^2.5.1",
+    "better-sqlite3": "^12.10.0",
+    "canvacord": "^6.0.2",
+    "chalk": "^4.1.2",
+    "cheerio": "1.0.0",
+    "discord-api-types": "^0.38.19",
+    "discord.js": "^14.22.1",
+    "dotenv": "^17.2.3",
+    "sharp": "^0.33.5"
+  },
+  "devDependencies": {
+    "electron": "^37.2.6",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "gg.core.selfhosted-bot",
+    "productName": "Self-hosted bot by Core",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "bot.js",
+      "desktop/**/*",
+      "src/**/*",
+      "config/**/*",
+      "README.md",
+      "LICENSE.md",
+      ".env.example",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "node_modules/better-sqlite3/**/*",
+      "node_modules/sharp/**/*"
+    ],
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ],
+      "artifactName": "Self-hosted-bot-by-Core-Portable-${version}-${arch}.${ext}"
+    },
+    "nsis": {
+      "artifactName": "Self-hosted-bot-by-Core-Setup-${version}-${arch}.${ext}",
+      "include": "build/installer.nsh",
+      "license": "build/installer-info.txt",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico",
+      "installerHeader": "build/installer-header.bmp",
+      "installerSidebar": "build/installer-sidebar.bmp",
+      "uninstallerSidebar": "build/uninstaller-sidebar.bmp",
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": "always",
+      "createStartMenuShortcut": true,
+      "shortcutName": "Self-hosted bot by Core",
+      "uninstallDisplayName": "Self-hosted bot by Core",
+      "menuCategory": "Core"
+    }
+  }
+}

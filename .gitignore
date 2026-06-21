@@ -1,0 +1,11 @@
+bot.log
+data/*.db
+data/*.sqlite
+data/*.sqlite3
+data/*-wal
+data/*-shm
+dist/
+release/
+out/
+node_modules/
+
