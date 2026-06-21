@@ -65,7 +65,11 @@ const uiCopy = {
     joinServer: 'Официальный Discord',
     exportHosting: 'Экспорт для хостинга',
     hostingExported: 'Архив для хостинга сохранён',
-    savedNotice: 'Сохранено!'
+    savedNotice: 'Сохранено!',
+    settingsHub: 'Группы настроек',
+    openGroup: 'Открыть',
+    fieldsCount: 'Параметров',
+    backToGroups: 'К группам'
   },
   en: {
     setup: 'First run',
@@ -107,7 +111,11 @@ const uiCopy = {
     joinServer: 'Official Discord',
     exportHosting: 'Hosting Export',
     hostingExported: 'Hosting archive saved',
-    savedNotice: 'Saved!'
+    savedNotice: 'Saved!',
+    settingsHub: 'Settings groups',
+    openGroup: 'Open',
+    fieldsCount: 'Settings',
+    backToGroups: 'Back to groups'
   },
   de: {
     setup: 'Erster Start',
@@ -149,7 +157,11 @@ const uiCopy = {
     joinServer: 'Offizieller Discord',
     exportHosting: 'Hosting-Export',
     hostingExported: 'Hosting-Archiv gespeichert',
-    savedNotice: 'Gespeichert!'
+    savedNotice: 'Gespeichert!',
+    settingsHub: 'Einstellungsgruppen',
+    openGroup: 'Offnen',
+    fieldsCount: 'Einstellungen',
+    backToGroups: 'Zuruck zu Gruppen'
   },
   ua: {
     setup: 'Перший запуск',
@@ -191,7 +203,11 @@ const uiCopy = {
     joinServer: 'Офіційний Discord',
     exportHosting: 'Експорт для хостингу',
     hostingExported: 'Архів для хостингу збережено',
-    savedNotice: 'Збережено!'
+    savedNotice: 'Збережено!',
+    settingsHub: 'Групи налаштувань',
+    openGroup: 'Відкрити',
+    fieldsCount: 'Параметрів',
+    backToGroups: 'До груп'
   }
 };
 
@@ -460,7 +476,10 @@ const translations = {
 
 const settingsLayout = [
   {
+    id: 'identity',
     titleKey: 'main',
+    summaryMap: { ru: 'Токен, ID приложения, сервер и SQLite база.', en: 'Token, application ID, server and SQLite database.', de: 'Token, App-ID, Server und SQLite database.', ua: 'Токен, ID застосунку, сервер і SQLite база.' },
+    accent: '#43c7b2',
     items: [
       { key: 'DISCORD_TOKEN', labelMap: { ru: 'Токен бота', en: 'Bot token', de: 'Bot-Token', ua: 'Токен бота' }, type: 'password' },
       { key: 'CLIENT_ID', labelKey: 'clientId' },
@@ -470,7 +489,10 @@ const settingsLayout = [
     ]
   },
   {
+    id: 'presence',
     titleMap: { ru: 'Статус бота', en: 'Bot status', de: 'Bot-Status', ua: 'Статус бота' },
+    summaryMap: { ru: 'Presence, активность и текст статуса в Discord.', en: 'Presence, activity type and Discord status text.', de: 'Presence, Aktivitatstyp und Discord status text.', ua: 'Presence, активність і текст статусу в Discord.' },
+    accent: '#6ea8ff',
     items: [
       { key: 'BOT_STATUS', labelMap: { ru: 'Статус присутствия', en: 'Presence status', de: 'Prasenzstatus', ua: 'Статус присутності' }, type: 'select', options: selectOptions.botStatus },
       { key: 'BOT_ACTIVITY_TYPE', labelMap: { ru: 'Тип активности', en: 'Activity type', de: 'Aktivitatstyp', ua: 'Тип активності' }, type: 'select', options: selectOptions.activityType },
@@ -478,7 +500,10 @@ const settingsLayout = [
     ]
   },
   {
+    id: 'channels',
     titleKey: 'channels',
+    summaryMap: { ru: 'Каналы логов, уведомлений и резервных копий.', en: 'Log, notification and backup channel IDs.', de: 'Log-, notification- und backup-channel IDs.', ua: 'Канали логів, сповіщень і резервних копій.' },
+    accent: '#e0b14f',
     items: [
       { key: 'ADMIN_LOG_CHANNEL_ID', labelKey: 'adminLog' },
       { key: 'LOG_CHANNEL_ID', labelKey: 'logChannel' },
@@ -487,7 +512,10 @@ const settingsLayout = [
     ]
   },
   {
+    id: 'moderation',
     titleKey: 'moderation',
+    summaryMap: { ru: 'Роли доступа, мут-роль и правила наказаний за варны.', en: 'Access roles, mute role and warning punishment rules.', de: 'Access roles, mute role und warn rules.', ua: 'Ролі доступу, mute-роль і правила покарань за варни.' },
+    accent: '#ef6572',
     items: [
       { key: 'MUTE_ROLE', labelKey: 'muteRole' },
       { key: 'ADMIN_ROLES_LEVEL_0', label: 'Admin role 0' },
@@ -500,7 +528,35 @@ const settingsLayout = [
     ]
   },
   {
+    id: 'automod',
+    titleMap: { ru: 'Автомодерация', en: 'Automoderation', de: 'Automoderation', ua: 'Автомодерація' },
+    summaryMap: { ru: 'Пинги, плохие слова, ссылки, Discord-инвайты и спам.', en: 'Pings, bad words, links, Discord invites and spam.', de: 'Pings, Wortfilter, Links, Discord-Einladungen und Spam.', ua: 'Пінги, погані слова, посилання, Discord-запрошення і спам.' },
+    accent: '#9f7aea',
+    items: [
+      { key: 'AUTOMOD_ENABLED', labelMap: { ru: 'Автомодерация включена', en: 'Automoderation enabled', de: 'Automoderation aktiv', ua: 'Автомодерація увімкнена' }, type: 'checkbox' },
+      { key: 'AUTOMOD_DELETE_MESSAGE', labelMap: { ru: 'Удалять нарушающее сообщение', en: 'Delete violating message', de: 'Regelverstoss-Nachricht loschen', ua: 'Видаляти повідомлення з порушенням' }, type: 'checkbox' },
+      { key: 'AUTOMOD_WARN_USER', labelMap: { ru: 'Выдавать варн за нарушение', en: 'Issue warning for violation', de: 'Warn fur Verstoss ausstellen', ua: 'Видавати варн за порушення' }, type: 'checkbox' },
+      { key: 'AUTOMOD_IGNORE_ADMINISTRATORS', labelMap: { ru: 'Игнорировать Discord-администраторов', en: 'Ignore Discord administrators', de: 'Discord-Administratoren ignorieren', ua: 'Ігнорувати Discord-адміністраторів' }, type: 'checkbox' },
+      { key: 'AUTOMOD_LOG_CHANNEL_ID', labelMap: { ru: 'Канал логов автомодерации', en: 'Automoderation log channel', de: 'Automoderation-Log-Kanal', ua: 'Канал логів автомодерації' } },
+      { key: 'AUTOMOD_BYPASS_ROLE_IDS', labelMap: { ru: 'Роли-исключения', en: 'Bypass role IDs', de: 'Bypass-Rollen-IDs', ua: 'Ролі-винятки' } },
+      { key: 'AUTOMOD_PING_ENABLED', labelMap: { ru: 'Защита от массовых пингов', en: 'Mass ping protection', de: 'Mass-Ping-Schutz', ua: 'Захист від масових пінгів' }, type: 'checkbox' },
+      { key: 'AUTOMOD_PING_MAX_MENTIONS', labelMap: { ru: 'Лимит упоминаний', en: 'Mention limit', de: 'Mention-Limit', ua: 'Ліміт згадок' }, type: 'number', attrs: 'min="1" step="1"' },
+      { key: 'AUTOMOD_BAD_WORDS_ENABLED', labelMap: { ru: 'Фильтр плохих слов', en: 'Bad words filter', de: 'Wortfilter', ua: 'Фільтр поганих слів' }, type: 'checkbox' },
+      { key: 'AUTOMOD_BAD_WORDS', labelMap: { ru: 'Список плохих слов', en: 'Bad words list', de: 'Wortliste', ua: 'Список поганих слів' }, type: 'textarea', attrs: 'rows="4" spellcheck="false"' },
+      { key: 'AUTOMOD_LINKS_ENABLED', labelMap: { ru: 'Проверять ссылки', en: 'Check links', de: 'Links prufen', ua: 'Перевіряти посилання' }, type: 'checkbox' },
+      { key: 'AUTOMOD_LINKS_BLOCK_INVITES', labelMap: { ru: 'Блокировать Discord-инвайты', en: 'Block Discord invites', de: 'Discord-Einladungen blockieren', ua: 'Блокувати Discord-запрошення' }, type: 'checkbox' },
+      { key: 'AUTOMOD_LINKS_BLOCK_ALL', labelMap: { ru: 'Блокировать все ссылки', en: 'Block all links', de: 'Alle Links blockieren', ua: 'Блокувати всі посилання' }, type: 'checkbox' },
+      { key: 'AUTOMOD_LINKS_ALLOWED_DOMAINS', labelMap: { ru: 'Разрешённые домены', en: 'Allowed domains', de: 'Erlaubte Domains', ua: 'Дозволені домени' }, type: 'textarea', attrs: 'rows="3" spellcheck="false"' },
+      { key: 'AUTOMOD_SPAM_ENABLED', labelMap: { ru: 'Антиспам включён', en: 'Anti-spam enabled', de: 'Anti-Spam aktiv', ua: 'Антиспам увімкнено' }, type: 'checkbox' },
+      { key: 'AUTOMOD_SPAM_MESSAGE_LIMIT', labelMap: { ru: 'Сообщений за окно', en: 'Messages per window', de: 'Nachrichten pro Fenster', ua: 'Повідомлень за вікно' }, type: 'number', attrs: 'min="2" step="1"' },
+      { key: 'AUTOMOD_SPAM_TIME_WINDOW_MS', labelMap: { ru: 'Окно спама, мс', en: 'Spam window, ms', de: 'Spam-Fenster, ms', ua: 'Вікно спаму, мс' }, type: 'number', attrs: 'min="5000" step="1000"' }
+    ]
+  },
+  {
+    id: 'welcomes',
     titleMap: { ru: 'Приветствия', en: 'Welcomes', de: 'Begrussungen', ua: 'Привітання' },
+    summaryMap: { ru: 'Отдельные JSON-шаблоны для ЛС и серверного приветствия.', en: 'Separate JSON templates for DM and server welcomes.', de: 'Separate JSON-Vorlagen fur DM- und Server-Willkommen.', ua: 'Окремі JSON-шаблони для ЛП і серверного привітання.' },
+    accent: '#66d18f',
     items: [
       { key: 'WELCOME_DM_ENABLED', labelMap: { ru: 'ЛС-приветствие включено', en: 'DM welcome enabled', de: 'DM-Willkommen aktiv', ua: 'ЛП-привітання увімкнено' }, type: 'checkbox' },
       { key: 'WELCOME_DM_JSON', labelMap: { ru: 'JSON ЛС-приветствия', en: 'DM welcome JSON', de: 'DM-Willkommen JSON', ua: 'JSON ЛП-привітання' }, type: 'json', sample: 'dm' },
@@ -510,7 +566,10 @@ const settingsLayout = [
     ]
   },
   {
+    id: 'advanced',
     titleKey: 'advanced',
+    summaryMap: { ru: 'Уровни, voice tracking, backup и отключение команд.', en: 'Levels, voice tracking, backup and command disabling.', de: 'Level, Voice tracking, Backup und command disabling.', ua: 'Рівні, voice tracking, backup і вимкнення команд.' },
+    accent: '#8ab4f8',
     items: [
       { key: 'LEVELS_ENABLED', labelKey: 'levels', type: 'checkbox' },
       { key: 'VOICE_TRACKING_ENABLED', labelKey: 'voice', type: 'checkbox' },
@@ -544,6 +603,23 @@ const settingHelp = {
   MUTE_ROLE: 'ID роли мута. Бот будет выдавать её при mute и снимать при unmute или истечении наказания.',
   WARN_PUNISHMENTS: 'Правила наказаний за варны. Формат: количество:действие:срок, например 2:mute:30m,8:ban:1d.',
   MODERATION_SWEEP_INTERVAL_MS: 'Как часто бот проверяет истёкшие наказания. Чем меньше число, тем быстрее реакции, но выше нагрузка.',
+  AUTOMOD_ENABLED: 'Главный переключатель автомодерации. Если выключить, проверки пингов, слов, ссылок и спама не будут выполняться.',
+  AUTOMOD_DELETE_MESSAGE: 'Удаляет сообщение, которое нарушило правила автомодерации. Для работы боту нужно право Manage Messages.',
+  AUTOMOD_WARN_USER: 'Если включено, каждое нарушение записывается как варн в SQLite и может запускать наказания из правил варнов.',
+  AUTOMOD_IGNORE_ADMINISTRATORS: 'Пропускает участников с Discord Administrator. Дополнительно всегда пропускаются владелец сервера и роли-исключения.',
+  AUTOMOD_LOG_CHANNEL_ID: 'Канал для логов автомодерации. Если оставить пустым, будет использован ADMIN_LOG_CHANNEL_ID.',
+  AUTOMOD_BYPASS_ROLE_IDS: 'ID ролей через запятую, которые автомодерация должна игнорировать. Подходит для модераторов, ботов-помощников и доверенных ролей.',
+  AUTOMOD_PING_ENABLED: 'Включает защиту от массовых упоминаний пользователей, ролей и everyone/here.',
+  AUTOMOD_PING_MAX_MENTIONS: 'Сколько упоминаний разрешено в одном сообщении. Если лимит превышен, сообщение считается нарушением.',
+  AUTOMOD_BAD_WORDS_ENABLED: 'Включает фильтр плохих слов. Список слов задаётся отдельно в поле ниже.',
+  AUTOMOD_BAD_WORDS: 'Список запрещённых слов через запятую, точку с запятой или новую строку. Регистр не важен.',
+  AUTOMOD_LINKS_ENABLED: 'Включает проверку ссылок. Можно блокировать только Discord-инвайты или все ссылки кроме разрешённых доменов.',
+  AUTOMOD_LINKS_BLOCK_INVITES: 'Блокирует ссылки discord.gg и discord.com/invite. Полезно, если реклама чужих серверов запрещена.',
+  AUTOMOD_LINKS_BLOCK_ALL: 'Блокирует любые ссылки, кроме доменов из allowlist. Если выключено, проверяются только Discord-инвайты.',
+  AUTOMOD_LINKS_ALLOWED_DOMAINS: 'Домены, которые разрешены при блокировке всех ссылок. Указывать без https, например example.com, docs.example.com.',
+  AUTOMOD_SPAM_ENABLED: 'Включает антиспам по частоте сообщений и повторяющемуся тексту.',
+  AUTOMOD_SPAM_MESSAGE_LIMIT: 'Сколько сообщений один участник может отправить за окно времени до срабатывания антиспама.',
+  AUTOMOD_SPAM_TIME_WINDOW_MS: 'Окно времени антиспама в миллисекундах. Например 60000 означает 60 секунд.',
   LEVELS_ENABLED: 'Включает систему уровней и XP. Если выключить, команды уровней останутся видны в UI, но runtime не будет начислять прогресс.',
   VOICE_TRACKING_ENABLED: 'Включает учёт времени в голосовых каналах для лидербордов и статистики.',
   SQL_BACKUP_ENABLED: 'Включает резервное копирование SQLite. Для работы укажи канал SQL backup и дай боту право отправлять файлы.',
@@ -564,6 +640,7 @@ const state = {
   commandCategory: 'all',
   commandPage: 1,
   setupStep: 0,
+  settingsGroup: null,
   warnRuleIndex: null,
   busy: false,
   shellReady: false
@@ -617,6 +694,14 @@ function listFromEnv(key) {
 
 function sectionTitle(section) {
   return section.titleMap ? localText(section.titleMap, section.titleKey) : t(section.titleKey);
+}
+
+function sectionId(section, index = 0) {
+  return section.id || section.titleKey || `section-${index}`;
+}
+
+function sectionSummary(section) {
+  return section.summaryMap ? localText(section.summaryMap, '') : '';
 }
 
 function settingLabel(item) {
@@ -1126,6 +1211,18 @@ function renderField(item) {
     return renderJsonField(item, id, value, label);
   }
 
+  if (item.type === 'textarea') {
+    return `
+      <div class="field">
+        <div class="field-heading">
+          <label for="${id}">${escapeHtml(label)}</label>
+          ${helpButton(item.key, label)}
+        </div>
+        <textarea id="${id}" data-env="${escapeHtml(item.key)}" ${attrs}>${value}</textarea>
+      </div>
+    `;
+  }
+
   return `
     <div class="field">
       <div class="field-heading">
@@ -1137,19 +1234,72 @@ function renderField(item) {
   `;
 }
 
-function renderSettingsView() {
+function renderSettingsCard(section, index) {
+  const id = sectionId(section, index);
+  const checkboxCount = section.items.filter((item) => item.type === 'checkbox').length;
+  const enabledCount = section.items.filter((item) => item.type === 'checkbox' && String(envValue(item.key)).toLowerCase() === 'true').length;
+
   return `
-    <div class="settings-grid">
-      ${settingsLayout.map((section) => `
-        <section class="panel settings-panel">
-          <div class="panel-title">
-            <h2>${escapeHtml(sectionTitle(section))}</h2>
-          </div>
-          ${section.items.map(renderField).join('')}
-        </section>
-      `).join('')}
+    <button class="settings-card" type="button" data-settings-group="${escapeHtml(id)}" style="--section-accent: ${escapeHtml(section.accent || '#43c7b2')}">
+      <span class="settings-card-glow"></span>
+      <span class="settings-card-top">
+        <span class="settings-card-mark">${escapeHtml(String(index + 1).padStart(2, '0'))}</span>
+        <span class="badge">${escapeHtml(`${section.items.length} ${ui('fieldsCount')}`)}</span>
+      </span>
+      <strong>${escapeHtml(sectionTitle(section))}</strong>
+      <span class="settings-card-summary">${escapeHtml(sectionSummary(section))}</span>
+      <span class="settings-card-footer">
+        <span>${checkboxCount ? `${enabledCount}/${checkboxCount} ${t('enabled').toLowerCase()}` : ui('openGroup')}</span>
+        <span class="settings-card-arrow">-></span>
+      </span>
+    </button>
+  `;
+}
+
+function renderSettingsCards() {
+  return `
+    <div class="settings-hub">
+      <div class="settings-hero">
+        <span class="eyebrow">${escapeHtml(ui('settingsHub'))}</span>
+        <h2>${escapeHtml(t('settings'))}</h2>
+      </div>
+      <div class="settings-card-grid">
+        ${settingsLayout.map(renderSettingsCard).join('')}
+      </div>
     </div>
   `;
+}
+
+function renderSettingsDetail(section) {
+  return `
+    <div class="settings-detail">
+      <div class="settings-detail-header" style="--section-accent: ${escapeHtml(section.accent || '#43c7b2')}">
+        <button type="button" data-settings-back>${escapeHtml(ui('backToGroups'))}</button>
+        <div>
+          <span class="eyebrow">${escapeHtml(ui('settingsHub'))}</span>
+          <h2>${escapeHtml(sectionTitle(section))}</h2>
+          <p>${escapeHtml(sectionSummary(section))}</p>
+        </div>
+      </div>
+      <section class="panel settings-panel settings-panel-detail">
+        <div class="settings-field-grid">
+          ${section.items.map(renderField).join('')}
+        </div>
+      </section>
+    </div>
+  `;
+}
+
+function renderSettingsView() {
+  if (!state.settingsGroup) return renderSettingsCards();
+
+  const section = settingsLayout.find((entry, index) => sectionId(entry, index) === state.settingsGroup);
+  if (!section) {
+    state.settingsGroup = null;
+    return renderSettingsCards();
+  }
+
+  return renderSettingsDetail(section);
 }
 
 function commandCategories() {
@@ -1632,6 +1782,24 @@ function bindRenderedControls() {
     });
   });
 
+  document.querySelectorAll('[data-settings-group]').forEach((button) => {
+    bindOnce(button, 'click', 'SettingsGroup', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      state.settingsGroup = button.dataset.settingsGroup;
+      renderView();
+    });
+  });
+
+  document.querySelectorAll('[data-settings-back]').forEach((button) => {
+    bindOnce(button, 'click', 'SettingsBack', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      state.settingsGroup = null;
+      renderView();
+    });
+  });
+
   document.querySelectorAll('[data-lang]').forEach((button) => {
     bindOnce(button, 'click', 'Lang', (event) => {
       event.preventDefault();
@@ -1784,6 +1952,19 @@ function handleClick(event) {
       updateChrome();
       renderView();
     }
+    return;
+  }
+
+  const settingsGroup = closestTarget(event, '[data-settings-group]');
+  if (settingsGroup) {
+    state.settingsGroup = settingsGroup.dataset.settingsGroup;
+    renderView();
+    return;
+  }
+
+  if (closestTarget(event, '[data-settings-back]')) {
+    state.settingsGroup = null;
+    renderView();
     return;
   }
 

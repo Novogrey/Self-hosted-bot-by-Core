@@ -1,6 +1,6 @@
 {
   "name": "core-discord-bot",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "Self-hosted Discord bot by Core with a desktop control panel.",
   "main": "desktop/main.js",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -9,7 +9,7 @@
     "bot": "node bot.js",
     "app": "electron .",
     "assets:installer": "node scripts/generate-installer-assets.js",
-    "dist": "npm run assets:installer && electron-builder --win && node scripts/organize-dist-artifacts.js",
+    "dist": "npm run assets:installer && electron-builder --win && node scripts/organize-dist-artifacts.js && node scripts/package-updater.js",
     "check": "node --check bot.js && node --check desktop/main.js && node --check desktop/preload.js && node --check desktop/renderer/app.js"
   },
   "private": true,

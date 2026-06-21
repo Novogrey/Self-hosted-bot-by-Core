@@ -37,8 +37,8 @@
 - Раздельные JSON-шаблоны приветствий для личных сообщений и серверного канала.
 - Настройка статуса и активности Discord-бота.
 - Визуальный редактор правил предупреждений.
+- Автомодерация упоминаний, нецензурной лексики, ссылок, приглашений в Discord и спама.
 - Экспорт runtime-архива для размещения на Node.js-хостинге.
-- Очистка пользовательских данных из `%APPDATA%` при удалении через установщик.
 
 ## Состав поставки
 
@@ -49,8 +49,11 @@
 | `Self-hosted-bot-by-Core-Setup-<version>.exe` | Универсальный установщик Windows |
 | `Self-hosted-bot-by-Core-Portable-<version>-x64.zip` | Portable-сборка для 64-bit Windows |
 | `Self-hosted-bot-by-Core-Portable-<version>-ia32.zip` | Portable-сборка для 32-bit Windows |
+| `Self-hosted-bot-by-Core-Updater-<version>.exe` | Основной файл обновления установленной версии без удаления данных |
+| `Self-hosted-bot-by-Core-Updater-<version>.zip` | Резервный updater-пакет с открытыми файлами обновления |
 
 Рекомендуемый вариант для большинства рабочих станций Windows: `x64.exe`.
+Если приложение уже установлено, используйте updater `.exe`. Для portable-сборки скачайте новый portable ZIP и замените старую portable-папку вручную.
 
 ## Первичная настройка
 
@@ -195,6 +198,7 @@ npm start
 - Separate JSON welcome templates for DM and server channel messages.
 - Bot presence and activity configuration.
 - Visual warning-rule editor.
+- Automoderation for pings, bad words, links, Discord invites, and spam.
 - Runtime ZIP export for Node.js hosting.
 
 ## Distribution Package
@@ -206,8 +210,11 @@ npm start
 | `Self-hosted-bot-by-Core-Setup-<version>.exe` | Universal Windows installer |
 | `Self-hosted-bot-by-Core-Portable-<version>-x64.zip` | Portable build for 64-bit Windows |
 | `Self-hosted-bot-by-Core-Portable-<version>-ia32.zip` | Portable build for 32-bit Windows |
+| `Self-hosted-bot-by-Core-Updater-<version>.exe` | Main updater for an installed version without removing data |
+| `Self-hosted-bot-by-Core-Updater-<version>.zip` | Fallback updater package with transparent update files |
 
 The recommended option for most Windows workstations is `x64.exe`.
+If the app is already installed, use the updater executable. For portable builds, download the new portable ZIP and replace the old portable folder manually.
 
 ## Initial Configuration
 

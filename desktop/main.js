@@ -36,6 +36,23 @@ const HOSTING_EXPORT_ENV_KEYS = [
   'LEVEL_ROLE_MAP',
   'MODERATION_SWEEP_INTERVAL_MS',
   'WARN_PUNISHMENTS',
+  'AUTOMOD_ENABLED',
+  'AUTOMOD_DELETE_MESSAGE',
+  'AUTOMOD_WARN_USER',
+  'AUTOMOD_IGNORE_ADMINISTRATORS',
+  'AUTOMOD_LOG_CHANNEL_ID',
+  'AUTOMOD_BYPASS_ROLE_IDS',
+  'AUTOMOD_PING_ENABLED',
+  'AUTOMOD_PING_MAX_MENTIONS',
+  'AUTOMOD_BAD_WORDS_ENABLED',
+  'AUTOMOD_BAD_WORDS',
+  'AUTOMOD_LINKS_ENABLED',
+  'AUTOMOD_LINKS_BLOCK_INVITES',
+  'AUTOMOD_LINKS_BLOCK_ALL',
+  'AUTOMOD_LINKS_ALLOWED_DOMAINS',
+  'AUTOMOD_SPAM_ENABLED',
+  'AUTOMOD_SPAM_MESSAGE_LIMIT',
+  'AUTOMOD_SPAM_TIME_WINDOW_MS',
   'BOT_STATUS',
   'BOT_ACTIVITY_TYPE',
   'BOT_ACTIVITY_TEXT',
@@ -149,6 +166,23 @@ function loadEnv() {
     SQL_BACKUP_DEBOUNCE_MS: '1500',
     MODERATION_SWEEP_INTERVAL_MS: '60000',
     WARN_PUNISHMENTS: '2:mute:30m,4:mute:2h,6:mute:5h,7:mute:10h,8:ban:1d,10:ban:10d,12:ban:31d,14:ban:183d,16:ban:365d',
+    AUTOMOD_ENABLED: 'true',
+    AUTOMOD_DELETE_MESSAGE: 'true',
+    AUTOMOD_WARN_USER: 'true',
+    AUTOMOD_IGNORE_ADMINISTRATORS: 'true',
+    AUTOMOD_LOG_CHANNEL_ID: '',
+    AUTOMOD_BYPASS_ROLE_IDS: '',
+    AUTOMOD_PING_ENABLED: 'true',
+    AUTOMOD_PING_MAX_MENTIONS: '5',
+    AUTOMOD_BAD_WORDS_ENABLED: 'false',
+    AUTOMOD_BAD_WORDS: '',
+    AUTOMOD_LINKS_ENABLED: 'true',
+    AUTOMOD_LINKS_BLOCK_INVITES: 'true',
+    AUTOMOD_LINKS_BLOCK_ALL: 'false',
+    AUTOMOD_LINKS_ALLOWED_DOMAINS: '',
+    AUTOMOD_SPAM_ENABLED: 'true',
+    AUTOMOD_SPAM_MESSAGE_LIMIT: '5',
+    AUTOMOD_SPAM_TIME_WINDOW_MS: '60000',
     BOT_STATUS: 'online',
     BOT_ACTIVITY_TYPE: 'Watching',
     BOT_ACTIVITY_TEXT: 'self-hosted moderation',
@@ -177,6 +211,15 @@ function saveEnv(env) {
   const nextEnv = { ...(env || {}) };
   nextEnv.WELCOME_DM_JSON = compactJsonEnvValue(nextEnv.WELCOME_DM_JSON);
   nextEnv.WELCOME_SERVER_JSON = compactJsonEnvValue(nextEnv.WELCOME_SERVER_JSON);
+  for (const key of ['AUTOMOD_BAD_WORDS', 'AUTOMOD_LINKS_ALLOWED_DOMAINS', 'AUTOMOD_BYPASS_ROLE_IDS']) {
+    if (Object.prototype.hasOwnProperty.call(nextEnv, key)) {
+      nextEnv[key] = String(nextEnv[key] || '')
+        .split(/[\r\n,;]/)
+        .map((entry) => entry.trim())
+        .filter(Boolean)
+        .join(',');
+    }
+  }
   const existing = parseEnv(fs.existsSync(envPath) ? fs.readFileSync(envPath, 'utf8') : '');
   if (Object.prototype.hasOwnProperty.call(existing, 'token') && Object.prototype.hasOwnProperty.call(nextEnv, 'DISCORD_TOKEN')) {
     nextEnv.token = '';
