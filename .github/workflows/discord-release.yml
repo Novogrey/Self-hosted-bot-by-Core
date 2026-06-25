@@ -66,8 +66,6 @@ jobs:
               ]
             };
 
-            await fetch(process.env.DISCORD_WEBHOOK, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(payload)
-            });
+            require("child_process").execSync(
+              `curl -H "Content-Type: application/json" -X POST -d '${JSON.stringify(payload)}' "$DISCORD_WEBHOOK"`
+            );
