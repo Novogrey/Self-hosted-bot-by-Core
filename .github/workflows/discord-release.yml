@@ -30,31 +30,28 @@ jobs:
             --arg content "$CHANGES" \
             '{
               content: "<@&1519341297188470874>",
-              allowed_mentions: {
-                roles: ["1519341297188470874"]
-              },
+              allowed_mentions: { roles: ["1519341297188470874"] },
+
               embeds: [
                 {
-                  title: "🚀 " + $title,
+                  title: ("🚀 \($title)"),
                   url: $url,
                   color: 5793266,
 
                   fields: [
                     {
                       name: "📦 Version",
-                      value: "`" + $version + "`",
+                      value: ("`\($version)`"),
                       inline: true
                     },
                     {
                       name: "🔗 Release",
-                      value: "[Open on GitHub](" + $url + ")",
+                      value: ("[Open on GitHub](\($url))"),
                       inline: true
                     }
                   ],
 
-                  description:
-                    "## 🆕 Changelog\n" +
-                    $content,
+                  description: ("## 🆕 Changelog\n\n" + $content),
 
                   footer: {
                     text: "Core Release System"
