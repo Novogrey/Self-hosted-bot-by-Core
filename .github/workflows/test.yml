@@ -1,8 +1,18 @@
-- name: Check secret exists
-  run: |
-    if [ -z "${{ secrets.DISCORD_WEBHOOK }}" ]; then
-      echo "❌ SECRET EMPTY"
-      exit 1
-    else
-      echo "✅ SECRET EXISTS"
-    fi
+name: Test Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check secret
+        run: |
+          if [ -z "${{ secrets.DISCORD_WEBHOOK }}" ]; then
+            echo "SECRET EMPTY"
+            exit 1
+          else
+            echo "SECRET OK"
+          fi
