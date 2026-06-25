@@ -1,18 +1,9 @@
-name: Test Workflow
+- name: Discord test
+  run: |
+    response=$(curl -s -w "%{http_code}" \
+      -H "Content-Type: application/json" \
+      -X POST \
+      -d '{"content":"🔥 TEST FROM GITHUB ACTIONS"}' \
+      ${{ secrets.DISCORD_WEBHOOK }})
 
-on:
-  workflow_dispatch:
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check secret
-        run: |
-          if [ -z "${{ secrets.DISCORD_WEBHOOK }}" ]; then
-            echo "SECRET EMPTY"
-            exit 1
-          else
-            echo "SECRET OK"
-          fi
+    echo "RESPONSE: $response"
