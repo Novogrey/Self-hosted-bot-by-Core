@@ -30,13 +30,19 @@ jobs:
             --arg content "$CHANGES" \
             '{
               content: "<@&1519341297188470874>",
-              allowed_mentions: { roles: ["1519341297188470874"] },
+              allowed_mentions: {
+                roles: ["1519341297188470874"]
+              },
 
               embeds: [
                 {
                   title: ("🚀 \($title)"),
                   url: $url,
                   color: 5793266,
+
+                  thumbnail: {
+                    url: "https://cdn.discordapp.com/attachments/1452039397435244677/1458169510447153255/ChatGPT_Image_20_._2025_._17_38_56_1.png?ex=6a3e1fee&is=6a3cce6e&hm=defdd5d62ba2d6050a22f137211a6024374a15da995d9ab0dbb69271bdb990bb"
+                  },
 
                   fields: [
                     {
