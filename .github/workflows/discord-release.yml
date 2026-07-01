@@ -12,10 +12,9 @@ jobs:
       - name: Send release to Discord
         shell: bash
         run: |
-          set -e
+          set -euo pipefail
 
-          BODY='${{ toJson(github.event.release.body) }}'
-          BODY=$(echo "$BODY" | jq -r '.')
+          BODY=$(jq -r '.release.body // ""' "$GITHUB_EVENT_PATH")
 
           CHANGES=$(echo "$BODY" | awk '
             /<!-- DISCORD_START -->/{flag=1; next}
@@ -27,7 +26,6 @@ jobs:
             CHANGES="No changelog provided."
           fi
 
-          # защита от Discord лимитов
           CHANGES=$(echo "$CHANGES" | head -c 3500)
 
           CONTENT=$(jq -Rs . <<< "$CHANGES")
@@ -75,7 +73,7 @@ jobs:
               ]
             }')
 
-          curl -H "Content-Type: application/json" \
+          curl -sS -H "Content-Type: application/json" \
             -X POST \
             -d "$PAYLOAD" \
             "${{ secrets.DISCORD_WEBHOOK }}"
