@@ -1,4 +1,8 @@
 const { MessageFlags } = require('discord.js');
+const {
+  buildCustomPayload,
+  findDefaultTemplate
+} = require('./customMessages');
 
 const V2_COMPONENT_TYPES = new Set([9, 10, 11, 12, 13, 14, 17]);
 
@@ -86,23 +90,48 @@ function normalizePayload(payload, member) {
   return next;
 }
 
-function buildWelcomePayload(json, member) {
+function parseLegacyWelcomePayload(json) {
   const source = String(json || '').trim();
   if (!source) return null;
 
   const parsed = JSON.parse(source);
+  return Array.isArray(parsed) ? { components: parsed } : parsed;
+}
+
+function ensureWelcomeMentions(payload, member) {
+  if (!payload) return payload;
+  return {
+    ...payload,
+    allowedMentions: payload.allowedMentions || {
+      users: [member.id],
+      roles: [],
+      repliedUser: false
+    }
+  };
+}
+
+function buildWelcomeSlotPayload(slotKey, legacyJson, member) {
+  const tags = welcomeTags(member);
+  const fallback = parseLegacyWelcomePayload(legacyJson) || findDefaultTemplate(slotKey) || { content: '' };
+  const payload = buildCustomPayload(slotKey, tags, fallback);
+  return ensureWelcomeMentions(normalizePayload(payload, member), member);
+}
+
+function buildWelcomePayload(json, member) {
+  const parsed = parseLegacyWelcomePayload(json);
+  if (!parsed) return null;
   const templated = applyTags(parsed, welcomeTags(member));
   return normalizePayload(templated, member);
 }
 
 function buildDmWelcomePayload(member) {
   if (!envEnabled(process.env.WELCOME_DM_ENABLED)) return null;
-  return buildWelcomePayload(process.env.WELCOME_DM_JSON, member);
+  return buildWelcomeSlotPayload('welcome.dm', process.env.WELCOME_DM_JSON, member);
 }
 
 function buildServerWelcomePayload(member) {
   if (!envEnabled(process.env.WELCOME_SERVER_ENABLED)) return null;
-  return buildWelcomePayload(process.env.WELCOME_SERVER_JSON, member);
+  return buildWelcomeSlotPayload('welcome.server', process.env.WELCOME_SERVER_JSON, member);
 }
 
 module.exports = {

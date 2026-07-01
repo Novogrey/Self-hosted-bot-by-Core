@@ -3,6 +3,7 @@ const COMMAND_PAGE_SIZE = 10;
 const ONBOARDING_STORAGE_KEY = 'core-onboarding-complete';
 const ONBOARDING_ASSET_BASE = './assets/onboarding';
 const SUPPORT_SERVER_URL = 'https://discord.gg/YF8krDPCZh';
+const MESSAGE_BRAND_FOOTER = '-# Created by [Self-hosted bot by Core](https://github.com/Novogrey/Self-hosted-bot-by-Core)';
 const WARN_DURATION_UNITS = ['m', 'h', 'd', 'w'];
 const WELCOME_TAGS = [
   '{{username}}',
@@ -21,6 +22,38 @@ const WELCOME_TAGS = [
   '{{createdrelative}}',
   '{{guildicon}}',
   '{{guildbanner}}'
+];
+const MESSAGE_TAGS = [
+  ...WELCOME_TAGS,
+  '{{moderator}}',
+  '{{moderatorid}}',
+  '{{moderatormention}}',
+  '{{reason}}',
+  '{{duration}}',
+  '{{expires}}',
+  '{{warnid}}',
+  '{{count}}',
+  '{{action}}',
+  '{{results}}',
+  '{{subcommand}}',
+  '{{target}}',
+  '{{targetid}}',
+  '{{targets}}',
+  '{{text}}',
+  '{{amount}}',
+  '{{time}}',
+  '{{user_ids}}',
+  '{{userids_or_mentions}}',
+  '{{warnids}}',
+  '{{level}}',
+  '{{experience}}',
+  '{{command}}',
+  '{{channel}}',
+  '{{channelid}}',
+  '{{violations}}',
+  '{{deleted}}',
+  '{{preview}}',
+  '{{timestamp}}'
 ];
 
 const uiCopy = {
@@ -65,11 +98,37 @@ const uiCopy = {
     joinServer: 'Официальный Discord',
     exportHosting: 'Экспорт для хостинга',
     hostingExported: 'Архив для хостинга сохранён',
+    setupScamTrap: 'Настроить защитный канал',
+    scamTrapConfigured: 'Защитный канал настроен',
     savedNotice: 'Сохранено!',
     settingsHub: 'Группы настроек',
     openGroup: 'Открыть',
     fieldsCount: 'Параметров',
-    backToGroups: 'К группам'
+    backToGroups: 'К группам',
+    messageEditor: 'Редактор сообщений',
+    messageSlot: 'Шаблон сообщения',
+    messageEnabled: 'Использовать кастомный шаблон',
+    messageContent: 'Обычный текст',
+    messageEmbeds: 'Embeds',
+    messageComponents: 'Components V2 и link buttons',
+    messagePreview: 'Превью',
+    restoreDefault: 'Сбросить к дефолту',
+    addEmbed: 'Добавить embed',
+    addField: 'Добавить поле',
+    addTextBlock: 'Текстовый блок',
+    addSeparator: 'Разделитель',
+    addLinkButton: 'Link button',
+    addContainer: 'Container',
+    addSection: 'Section',
+    addThumbnail: 'Thumbnail',
+    addMediaGallery: 'Gallery',
+    addGalleryItem: 'Media Gallery Item',
+    addFile: 'File',
+    importMessageJson: 'Импорт message JSON',
+    allowedMentions: 'Разрешить упоминания',
+    noMessageSlot: 'Выберите сообщение слева',
+    actualPayloadNote: 'Ниже редактируется реальное сообщение, которое бот отправит при включённом шаблоне.',
+    componentSafetyNote: 'Разрешены display Components V2 и link buttons. Custom buttons, selects и text inputs заблокированы, чтобы не ломать команды.'
   },
   en: {
     setup: 'First run',
@@ -111,11 +170,37 @@ const uiCopy = {
     joinServer: 'Official Discord',
     exportHosting: 'Hosting Export',
     hostingExported: 'Hosting archive saved',
+    setupScamTrap: 'Configure trap channel',
+    scamTrapConfigured: 'Scam trap channel configured',
     savedNotice: 'Saved!',
     settingsHub: 'Settings groups',
     openGroup: 'Open',
     fieldsCount: 'Settings',
-    backToGroups: 'Back to groups'
+    backToGroups: 'Back to groups',
+    messageEditor: 'Message editor',
+    messageSlot: 'Message template',
+    messageEnabled: 'Use custom template',
+    messageContent: 'Plain content',
+    messageEmbeds: 'Embeds',
+    messageComponents: 'Components V2 and link buttons',
+    messagePreview: 'Preview',
+    restoreDefault: 'Reset to default',
+    addEmbed: 'Add embed',
+    addField: 'Add field',
+    addTextBlock: 'Text block',
+    addSeparator: 'Separator',
+    addLinkButton: 'Link button',
+    addContainer: 'Container',
+    addSection: 'Section',
+    addThumbnail: 'Thumbnail',
+    addMediaGallery: 'Gallery',
+    addGalleryItem: 'Media Gallery Item',
+    addFile: 'File',
+    importMessageJson: 'Import message JSON',
+    allowedMentions: 'Allowed mentions',
+    noMessageSlot: 'Select a message on the left',
+    actualPayloadNote: 'You are editing the real message the bot will send when this template is enabled.',
+    componentSafetyNote: 'Display Components V2 and link buttons are allowed. Custom buttons, selects and text inputs are blocked to protect command logic.'
   },
   de: {
     setup: 'Erster Start',
@@ -157,11 +242,37 @@ const uiCopy = {
     joinServer: 'Offizieller Discord',
     exportHosting: 'Hosting-Export',
     hostingExported: 'Hosting-Archiv gespeichert',
+    setupScamTrap: 'Schutzkanal einrichten',
+    scamTrapConfigured: 'Scam-Trap-Kanal eingerichtet',
     savedNotice: 'Gespeichert!',
     settingsHub: 'Einstellungsgruppen',
     openGroup: 'Offnen',
     fieldsCount: 'Einstellungen',
-    backToGroups: 'Zuruck zu Gruppen'
+    backToGroups: 'Zuruck zu Gruppen',
+    messageEditor: 'Nachrichten-Editor',
+    messageSlot: 'Nachrichtenvorlage',
+    messageEnabled: 'Eigene Vorlage verwenden',
+    messageContent: 'Textinhalt',
+    messageEmbeds: 'Embeds',
+    messageComponents: 'Components V2 und Link-Buttons',
+    messagePreview: 'Vorschau',
+    restoreDefault: 'Standard wiederherstellen',
+    addEmbed: 'Embed hinzufugen',
+    addField: 'Feld hinzufugen',
+    addTextBlock: 'Textblock',
+    addSeparator: 'Trenner',
+    addLinkButton: 'Link button',
+    addContainer: 'Container',
+    addSection: 'Section',
+    addThumbnail: 'Thumbnail',
+    addMediaGallery: 'Gallery',
+    addGalleryItem: 'Media Gallery Item',
+    addFile: 'File',
+    importMessageJson: 'Message JSON importieren',
+    allowedMentions: 'Erlaubte Erwahnungen',
+    noMessageSlot: 'Links eine Nachricht auswahlen',
+    actualPayloadNote: 'Hier bearbeiten Sie die echte Nachricht, die der Bot sendet, wenn die Vorlage aktiv ist.',
+    componentSafetyNote: 'Display Components V2 und Link-Buttons sind erlaubt. Custom Buttons, Selects und Text Inputs sind zum Schutz der Befehle blockiert.'
   },
   ua: {
     setup: 'Перший запуск',
@@ -203,11 +314,37 @@ const uiCopy = {
     joinServer: 'Офіційний Discord',
     exportHosting: 'Експорт для хостингу',
     hostingExported: 'Архів для хостингу збережено',
+    setupScamTrap: 'Налаштувати захисний канал',
+    scamTrapConfigured: 'Захисний канал налаштовано',
     savedNotice: 'Збережено!',
     settingsHub: 'Групи налаштувань',
     openGroup: 'Відкрити',
     fieldsCount: 'Параметрів',
-    backToGroups: 'До груп'
+    backToGroups: 'До груп',
+    messageEditor: 'Редактор повідомлень',
+    messageSlot: 'Шаблон повідомлення',
+    messageEnabled: 'Використовувати власний шаблон',
+    messageContent: 'Звичайний текст',
+    messageEmbeds: 'Embeds',
+    messageComponents: 'Components V2 і link buttons',
+    messagePreview: 'Превʼю',
+    restoreDefault: 'Скинути до дефолту',
+    addEmbed: 'Додати embed',
+    addField: 'Додати поле',
+    addTextBlock: 'Текстовий блок',
+    addSeparator: 'Розділювач',
+    addLinkButton: 'Link button',
+    addContainer: 'Container',
+    addSection: 'Section',
+    addThumbnail: 'Thumbnail',
+    addMediaGallery: 'Gallery',
+    addGalleryItem: 'Media Gallery Item',
+    addFile: 'File',
+    importMessageJson: 'Імпорт message JSON',
+    allowedMentions: 'Дозволити згадки',
+    noMessageSlot: 'Виберіть повідомлення зліва',
+    actualPayloadNote: 'Нижче редагується реальне повідомлення, яке бот надішле, якщо шаблон увімкнено.',
+    componentSafetyNote: 'Дозволені display Components V2 і link buttons. Custom buttons, selects і text inputs заблоковані, щоб не ламати команди.'
   }
 };
 
@@ -549,20 +686,40 @@ const settingsLayout = [
       { key: 'AUTOMOD_LINKS_ALLOWED_DOMAINS', labelMap: { ru: 'Разрешённые домены', en: 'Allowed domains', de: 'Erlaubte Domains', ua: 'Дозволені домени' }, type: 'textarea', attrs: 'rows="3" spellcheck="false"' },
       { key: 'AUTOMOD_SPAM_ENABLED', labelMap: { ru: 'Антиспам включён', en: 'Anti-spam enabled', de: 'Anti-Spam aktiv', ua: 'Антиспам увімкнено' }, type: 'checkbox' },
       { key: 'AUTOMOD_SPAM_MESSAGE_LIMIT', labelMap: { ru: 'Сообщений за окно', en: 'Messages per window', de: 'Nachrichten pro Fenster', ua: 'Повідомлень за вікно' }, type: 'number', attrs: 'min="2" step="1"' },
-      { key: 'AUTOMOD_SPAM_TIME_WINDOW_MS', labelMap: { ru: 'Окно спама, мс', en: 'Spam window, ms', de: 'Spam-Fenster, ms', ua: 'Вікно спаму, мс' }, type: 'number', attrs: 'min="5000" step="1000"' }
+      { key: 'AUTOMOD_SPAM_TIME_WINDOW_MS', labelMap: { ru: 'Окно спама, мс', en: 'Spam window, ms', de: 'Spam-Fenster, ms', ua: 'Вікно спаму, мс' }, type: 'number', attrs: 'min="5000" step="1000"' },
+      { key: 'SCAM_AD_CHANNEL_ID', labelMap: { ru: 'ID защитного scam-канала', en: 'Scam trap channel ID', de: 'Scam-Trap-Kanal-ID', ua: 'ID захисного scam-каналу' } },
+      {
+        key: 'SCAM_TRAP_SETUP_ACTION',
+        type: 'action',
+        action: 'setup-scam-trap',
+        labelMap: { ru: 'Первичная настройка канала', en: 'Initial channel setup', de: 'Ersteinrichtung des Kanals', ua: 'Первинне налаштування каналу' },
+        descriptionMap: {
+          ru: 'Сохраняет настройки, делает канал публичным для @everyone, очищает остальные channel overwrites, отправляет предупреждение и пытается поднять канал наверх.',
+          en: 'Saves settings, makes the channel public for @everyone, clears other channel overwrites, sends the warning and tries to move the channel to the top.',
+          de: 'Speichert die Einstellungen, macht den Kanal fur @everyone sichtbar, entfernt andere Channel-Overrides, sendet den Hinweis und versucht den Kanal nach oben zu verschieben.',
+          ua: 'Зберігає налаштування, відкриває канал для @everyone, очищає інші channel overwrites, надсилає попередження і пробує підняти канал угору.'
+        }
+      }
+    ]
+  },
+  {
+    id: 'messages',
+    titleMap: { ru: 'Редактор сообщений', en: 'Message editor', de: 'Nachrichten-Editor', ua: 'Редактор повідомлень' },
+    summaryMap: { ru: 'Визуальная настройка приветствий, ответов команд, embeds, Components V2 и link buttons.', en: 'Visual setup for welcomes, command responses, embeds, Components V2 and link buttons.', de: 'Visuelle Einrichtung fur Welcomes, Befehlsantworten, Embeds, Components V2 und Link-Buttons.', ua: 'Візуальне налаштування привітань, відповідей команд, embeds, Components V2 і link buttons.' },
+    accent: '#f28b82',
+    items: [
+      { key: 'CUSTOM_MESSAGES_JSON', labelMap: { ru: 'Все сообщения бота', en: 'All bot messages', de: 'Alle Bot-Nachrichten', ua: 'Усі повідомлення бота' }, type: 'messageEditor' }
     ]
   },
   {
     id: 'welcomes',
     titleMap: { ru: 'Приветствия', en: 'Welcomes', de: 'Begrussungen', ua: 'Привітання' },
-    summaryMap: { ru: 'Отдельные JSON-шаблоны для ЛС и серверного приветствия.', en: 'Separate JSON templates for DM and server welcomes.', de: 'Separate JSON-Vorlagen fur DM- und Server-Willkommen.', ua: 'Окремі JSON-шаблони для ЛП і серверного привітання.' },
+    summaryMap: { ru: 'Включение ЛС и серверного приветствия, канал задаётся здесь, дизайн - в редакторе сообщений.', en: 'Enable DM and server welcomes here; message design is edited in Message editor.', de: 'DM- und Server-Willkommen aktivieren; Design im Nachrichten-Editor.', ua: 'Увімкнення ЛП і серверного привітання; дизайн у редакторі повідомлень.' },
     accent: '#66d18f',
     items: [
       { key: 'WELCOME_DM_ENABLED', labelMap: { ru: 'ЛС-приветствие включено', en: 'DM welcome enabled', de: 'DM-Willkommen aktiv', ua: 'ЛП-привітання увімкнено' }, type: 'checkbox' },
-      { key: 'WELCOME_DM_JSON', labelMap: { ru: 'JSON ЛС-приветствия', en: 'DM welcome JSON', de: 'DM-Willkommen JSON', ua: 'JSON ЛП-привітання' }, type: 'json', sample: 'dm' },
       { key: 'WELCOME_SERVER_ENABLED', labelMap: { ru: 'Приветствие на сервере включено', en: 'Server welcome enabled', de: 'Server-Willkommen aktiv', ua: 'Привітання на сервері увімкнено' }, type: 'checkbox' },
-      { key: 'WELCOME_SERVER_CHANNEL_ID', labelMap: { ru: 'Канал приветствия', en: 'Welcome channel', de: 'Willkommenskanal', ua: 'Канал привітання' } },
-      { key: 'WELCOME_SERVER_JSON', labelMap: { ru: 'JSON приветствия на сервере', en: 'Server welcome JSON', de: 'Server-Willkommen JSON', ua: 'JSON привітання на сервері' }, type: 'json', sample: 'server' }
+      { key: 'WELCOME_SERVER_CHANNEL_ID', labelMap: { ru: 'Канал приветствия', en: 'Welcome channel', de: 'Willkommenskanal', ua: 'Канал привітання' } }
     ]
   },
   {
@@ -590,6 +747,7 @@ const settingHelp = {
   WELCOME_SERVER_ENABLED: 'Turns on the separate server welcome message. It is sent to WELCOME_SERVER_CHANNEL_ID and uses its own JSON template.',
   WELCOME_SERVER_CHANNEL_ID: 'Text channel ID where server welcome messages will be sent. Enable Discord Developer Mode, right-click the channel, then Copy ID.',
   WELCOME_SERVER_JSON: 'Paste or load a Discord message JSON for the public server welcome. It supports the same tags as the DM template and can use content, embeds, or Components V2.',
+  CUSTOM_MESSAGES_JSON: 'Visual editor storage for all customizable bot messages. It supports content, embeds, Components V2 display blocks and link buttons. Runtime blocks custom_id buttons, select menus and text inputs so command actions cannot be broken.',
   token: 'Старое имя переменной для токена Discord-бота. Оставлено для совместимости, но лучше заполнять DISCORD_TOKEN. Никогда не отправляй этот токен другим людям.',
   DISCORD_TOKEN: 'Основной токен Discord-бота из Discord Developer Portal. По нему приложение запускает именно self-hosted бота.',
   CLIENT_ID: 'ID приложения Discord. Нужен для регистрации slash-команд и создания ссылки приглашения с правами администратора.',
@@ -625,7 +783,9 @@ const settingHelp = {
   SQL_BACKUP_ENABLED: 'Включает резервное копирование SQLite. Для работы укажи канал SQL backup и дай боту право отправлять файлы.',
   SQL_BACKUP_DEBOUNCE_MS: 'Минимальная пауза между backup-событиями после изменений базы. Увеличь значение, если сервер часто пишет в SQLite.',
   DISABLED_COMMANDS: 'Список команд через запятую, которые нужно скрыть или отключить. То же самое можно переключать во вкладке команд.',
-  DISABLED_COMMAND_CATEGORIES: 'Список категорий через запятую. Категория global принудительно отключена, потому что публичные команды удалены.'
+  DISABLED_COMMAND_CATEGORIES: 'Список категорий через запятую. Категория global принудительно отключена, потому что публичные команды удалены.',
+  SCAM_AD_CHANNEL_ID: 'ID специального канала-ловушки для scam-рекламы. Любое сообщение пользователя в этом канале приводит к перманентному бану с удалением сообщений за 7 дней. Обычная автомодерация этот канал пропускает.',
+  SCAM_TRAP_SETUP_ACTION: 'Кнопка выполняет первичную настройку указанного scam trap канала через Discord API: сохраняет текущие настройки, оставляет один overwrite для @everyone с правами View Channel, Send Messages и Read Message History, отправляет редактируемое предупреждение из Message editor и пытается переместить канал наверх.'
 };
 
 const state = {
@@ -634,13 +794,16 @@ const state = {
   theme: localStorage.getItem('core-ui-theme') || 'dark',
   env: {},
   commands: [],
+  messageCatalog: [],
   logs: [],
   status: { status: 'stopped', pid: null },
+  version: '',
   search: '',
   commandCategory: 'all',
   commandPage: 1,
   setupStep: 0,
   settingsGroup: null,
+  messageSlot: null,
   warnRuleIndex: null,
   busy: false,
   shellReady: false
@@ -813,6 +976,8 @@ function renderShell() {
       <section class="view" id="view"></section>
     </main>
 
+    <div class="version-badge">v${escapeHtml(state.version || 'dev')}</div>
+
     <div class="help-overlay" data-help-overlay hidden>
       <section class="help-drawer" role="dialog" aria-modal="true" aria-labelledby="help-title">
         <button class="drawer-close" type="button" data-close-help aria-label="${escapeHtml(t('close'))}">×</button>
@@ -966,6 +1131,615 @@ function prettyJsonValue(value) {
   } catch {
     return raw;
   }
+}
+
+function clone(value) {
+  return JSON.parse(JSON.stringify(value ?? null));
+}
+
+function parseCustomMessageConfig() {
+  const raw = String(envValue('CUSTOM_MESSAGES_JSON') || '').trim();
+  if (!raw) return { version: 1, slots: {} };
+
+  try {
+    const parsed = JSON.parse(raw);
+    return {
+      version: Number(parsed.version || 1),
+      slots: parsed.slots && typeof parsed.slots === 'object' ? parsed.slots : parsed
+    };
+  } catch {
+    return { version: 1, slots: {} };
+  }
+}
+
+function saveCustomMessageConfig(config) {
+  const slots = Object.fromEntries(
+    Object.entries(config.slots || {}).filter(([, value]) => value && typeof value === 'object')
+  );
+  setEnvValue('CUSTOM_MESSAGES_JSON', JSON.stringify({ version: 1, slots }, null, 2));
+}
+
+function messageCatalog() {
+  return state.messageCatalog?.length ? state.messageCatalog : [
+    {
+      key: 'welcome.dm',
+      category: 'Welcomes',
+      title: { ru: 'ЛС-приветствие', en: 'DM welcome' },
+      description: { ru: 'Сообщение новому участнику в личные сообщения.', en: 'Message sent to a new member in direct messages.' },
+      defaultPayload: { content: 'Привет, {{mention}}! Добро пожаловать на **{{server}}**.' }
+    },
+    {
+      key: 'command.default.response',
+      category: 'Commands',
+      title: { ru: 'Fallback неизвестной команды', en: 'Unknown command fallback' },
+      description: { ru: 'Запасной шаблон для команды без отдельного слота.', en: 'Fallback template for a command without its own slot.' },
+      defaultPayload: {
+        content: 'Команда **/{{command}}** выполнена.\nПользователь: {{mention}}\nКанал: {{channel}}\nВремя: {{timestamp}}'
+      }
+    }
+  ];
+}
+
+function currentMessageSlot() {
+  const catalog = messageCatalog();
+  if (!state.messageSlot || !catalog.some((slot) => slot.key === state.messageSlot)) {
+    state.messageSlot = catalog[0]?.key || null;
+  }
+  return catalog.find((slot) => slot.key === state.messageSlot) || catalog[0] || null;
+}
+
+function defaultMessageTemplate(slot) {
+  return {
+    enabled: false,
+    payload: clone(slot?.defaultPayload || { content: '' })
+  };
+}
+
+function getMessageTemplate(key) {
+  const slot = messageCatalog().find((entry) => entry.key === key);
+  const config = parseCustomMessageConfig();
+  const template = config.slots?.[key];
+  if (!template || typeof template !== 'object') return defaultMessageTemplate(slot);
+  return {
+    enabled: template.enabled !== false,
+    payload: normalizeEditorPayload(template.payload || slot?.defaultPayload || { content: '' })
+  };
+}
+
+function setMessageTemplate(key, nextTemplate) {
+  const config = parseCustomMessageConfig();
+  config.slots[key] = {
+    enabled: Boolean(nextTemplate.enabled),
+    payload: normalizeEditorPayload(nextTemplate.payload)
+  };
+  saveCustomMessageConfig(config);
+}
+
+function resetMessageTemplate(key) {
+  const config = parseCustomMessageConfig();
+  delete config.slots[key];
+  saveCustomMessageConfig(config);
+  setEnvValue('CUSTOM_MESSAGES_RESET_AT', new Date().toISOString());
+}
+
+function normalizeEditorPayload(payload = {}) {
+  const next = clone(payload) || {};
+  if (!Array.isArray(next.embeds)) next.embeds = [];
+  if (!Array.isArray(next.components)) next.components = [];
+  if (!next.allowedMentions || typeof next.allowedMentions !== 'object') {
+    next.allowedMentions = { parse: [], repliedUser: false };
+  }
+  if (!Array.isArray(next.allowedMentions.parse)) next.allowedMentions.parse = [];
+  return next;
+}
+
+function updateCurrentMessage(mutator, rerender = true) {
+  const slot = currentMessageSlot();
+  if (!slot) return;
+  const template = getMessageTemplate(slot.key);
+  const next = clone(template);
+  mutator(next);
+  setMessageTemplate(slot.key, next);
+  if (rerender) renderView();
+}
+
+function numberToHex(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return '#43c7b2';
+  return `#${Math.max(0, Math.min(0xffffff, number)).toString(16).padStart(6, '0')}`;
+}
+
+function hexToNumber(value) {
+  const normalized = String(value || '').replace('#', '');
+  const number = Number.parseInt(normalized, 16);
+  return Number.isFinite(number) ? number : 4433842;
+}
+
+function markdownPreview(value) {
+  return escapeHtml(value || '')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/__(.*?)__/g, '<u>$1</u>')
+    .replace(/\n/g, '<br>');
+}
+
+function renderMessageSlotList(slots) {
+  const groups = new Map();
+  for (const slot of slots) {
+    const category = slot.category || 'Messages';
+    if (!groups.has(category)) groups.set(category, []);
+    groups.get(category).push(slot);
+  }
+
+  return [...groups.entries()].map(([category, entries]) => `
+    <div class="message-slot-group">
+      <span>${escapeHtml(category)}</span>
+      ${entries.map((slot) => `
+        <button type="button" data-message-slot="${escapeHtml(slot.key)}" class="${slot.key === state.messageSlot ? 'active' : ''}">
+          <strong>${escapeHtml(localText(slot.title, slot.key))}</strong>
+          <small>${escapeHtml(slot.key)}</small>
+        </button>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
+function renderAllowedMentions(payload) {
+  const parse = new Set(payload.allowedMentions?.parse || []);
+  const options = [
+    ['users', 'Users'],
+    ['roles', 'Roles'],
+    ['everyone', 'Everyone']
+  ];
+  return `
+    <div class="mention-toggles">
+      ${options.map(([value, label]) => `
+        <label>
+          <input type="checkbox" data-mention-parse="${value}" ${parse.has(value) ? 'checked' : ''}>
+          <span>${escapeHtml(label)}</span>
+        </label>
+      `).join('')}
+    </div>
+  `;
+}
+
+function renderEmbedEditor(embed, index) {
+  const fields = Array.isArray(embed.fields) ? embed.fields : [];
+  return `
+    <article class="embed-editor" data-embed-index="${index}">
+      <div class="embed-editor-head">
+        <strong>Embed ${index + 1}</strong>
+        <button type="button" data-embed-delete="${index}">${escapeHtml(ui('remove'))}</button>
+      </div>
+      <div class="editor-grid">
+        <label>Title<input data-embed-prop="title" data-embed-index="${index}" value="${escapeHtml(embed.title || '')}"></label>
+        <label>URL<input data-embed-prop="url" data-embed-index="${index}" value="${escapeHtml(embed.url || '')}"></label>
+        <label>Author name<input data-embed-prop="author.name" data-embed-index="${index}" value="${escapeHtml(embed.author?.name || '')}"></label>
+        <label>Author URL<input data-embed-prop="author.url" data-embed-index="${index}" value="${escapeHtml(embed.author?.url || '')}"></label>
+        <label>Author icon URL<input data-embed-prop="author.icon_url" data-embed-index="${index}" value="${escapeHtml(embed.author?.icon_url || '')}"></label>
+        <label>Timestamp<input data-embed-prop="timestamp" data-embed-index="${index}" value="${escapeHtml(embed.timestamp || '')}" placeholder="2026-06-30T12:00:00.000Z"></label>
+        <label class="span-2">Description<textarea data-embed-prop="description" data-embed-index="${index}" rows="4">${escapeHtml(embed.description || '')}</textarea></label>
+        <label>Color<input type="color" data-embed-prop="color" data-embed-index="${index}" value="${escapeHtml(numberToHex(embed.color))}"></label>
+        <label>Thumbnail URL<input data-embed-prop="thumbnail.url" data-embed-index="${index}" value="${escapeHtml(embed.thumbnail?.url || '')}"></label>
+        <label>Image URL<input data-embed-prop="image.url" data-embed-index="${index}" value="${escapeHtml(embed.image?.url || '')}"></label>
+        <label>Footer<input data-embed-prop="footer.text" data-embed-index="${index}" value="${escapeHtml(embed.footer?.text || '')}"></label>
+        <label>Footer icon URL<input data-embed-prop="footer.icon_url" data-embed-index="${index}" value="${escapeHtml(embed.footer?.icon_url || '')}"></label>
+      </div>
+      <div class="embed-fields">
+        <div class="mini-toolbar">
+          <strong>Fields</strong>
+          <button type="button" data-embed-add-field="${index}">${escapeHtml(ui('addField'))}</button>
+        </div>
+        ${fields.map((field, fieldIndex) => `
+          <div class="embed-field-row">
+            <input data-embed-field-prop="name" data-embed-index="${index}" data-field-index="${fieldIndex}" value="${escapeHtml(field.name || '')}" placeholder="Name">
+            <textarea rows="2" data-embed-field-prop="value" data-embed-index="${index}" data-field-index="${fieldIndex}" placeholder="Value">${escapeHtml(field.value || '')}</textarea>
+            <label class="inline-check"><input type="checkbox" data-embed-field-prop="inline" data-embed-index="${index}" data-field-index="${fieldIndex}" ${field.inline ? 'checked' : ''}> Inline</label>
+            <button type="button" data-embed-delete-field="${index}:${fieldIndex}">${escapeHtml(ui('remove'))}</button>
+          </div>
+        `).join('')}
+      </div>
+    </article>
+  `;
+}
+
+function selectOption(value, current, label) {
+  return `<option value="${escapeHtml(value)}" ${String(value) === String(current) ? 'selected' : ''}>${escapeHtml(label)}</option>`;
+}
+
+function renderComponentHead(title, path) {
+  return `
+    <div class="component-head">
+      <strong>${escapeHtml(title)}</strong>
+      <button type="button" data-component-delete="${escapeHtml(path)}">${escapeHtml(ui('remove'))}</button>
+    </div>
+  `;
+}
+
+function renderLinkButtonInputs(button, componentPath, buttonIndex, removable = true, prefix = 'component') {
+  const propAttr = prefix === 'section' ? 'data-section-button-prop' : 'data-component-button-prop';
+  const deleteAttr = prefix === 'section' ? '' : `<button type="button" data-component-button-delete="${escapeHtml(componentPath)}:${buttonIndex}">${escapeHtml(ui('remove'))}</button>`;
+  return `
+    <div class="link-button-row">
+      <input ${propAttr}="label" data-component-path="${escapeHtml(componentPath)}" data-button-index="${buttonIndex}" value="${escapeHtml(button.label || '')}" placeholder="Label">
+      <input ${propAttr}="url" data-component-path="${escapeHtml(componentPath)}" data-button-index="${buttonIndex}" value="${escapeHtml(button.url || '')}" placeholder="https://example.com">
+      <label class="inline-check"><input type="checkbox" ${propAttr}="disabled" data-component-path="${escapeHtml(componentPath)}" data-button-index="${buttonIndex}" ${button.disabled ? 'checked' : ''}> Disabled</label>
+      ${removable ? deleteAttr : ''}
+    </div>
+  `;
+}
+
+function renderSectionAccessoryEditor(component, path) {
+  const accessory = component.accessory || {};
+  const accessoryType = Number(accessory.type) === 11 ? 'thumbnail' : 'button';
+  return `
+    <div class="component-subgrid">
+      <label>Accessory
+        <select data-section-accessory-type data-component-path="${escapeHtml(path)}">
+          ${selectOption('button', accessoryType, 'Link button')}
+          ${selectOption('thumbnail', accessoryType, 'Thumbnail')}
+        </select>
+      </label>
+      ${accessoryType === 'thumbnail' ? `
+        <label>Thumbnail URL<input data-component-prop="accessory.media.url" data-component-path="${escapeHtml(path)}" value="${escapeHtml(accessory.media?.url || '')}" placeholder="https://example.com/image.png"></label>
+        <label>Description<input data-component-prop="accessory.description" data-component-path="${escapeHtml(path)}" value="${escapeHtml(accessory.description || '')}"></label>
+        <label class="inline-check"><input type="checkbox" data-component-prop="accessory.spoiler" data-component-path="${escapeHtml(path)}" ${accessory.spoiler ? 'checked' : ''}> Spoiler</label>
+      ` : ''}
+      ${accessoryType === 'button' ? renderLinkButtonInputs(accessory, path, 0, false, 'section') : ''}
+    </div>
+  `;
+}
+
+function renderMediaGalleryItems(component, path) {
+  const items = Array.isArray(component.items) ? component.items : [];
+  return `
+    <div class="gallery-items">
+      <div class="mini-toolbar">
+        <strong>Media items</strong>
+        <button type="button" data-gallery-item-add="${escapeHtml(path)}">${escapeHtml(ui('addGalleryItem'))}</button>
+      </div>
+      ${items.map((item, itemIndex) => `
+        <div class="gallery-item-row">
+          <input data-gallery-item-prop="url" data-component-path="${escapeHtml(path)}" data-gallery-index="${itemIndex}" value="${escapeHtml(item.media?.url || '')}" placeholder="Media URL">
+          <input data-gallery-item-prop="description" data-component-path="${escapeHtml(path)}" data-gallery-index="${itemIndex}" value="${escapeHtml(item.description || '')}" placeholder="Description">
+          <label class="inline-check"><input type="checkbox" data-gallery-item-prop="spoiler" data-component-path="${escapeHtml(path)}" data-gallery-index="${itemIndex}" ${item.spoiler ? 'checked' : ''}> Spoiler</label>
+          <button type="button" data-gallery-item-delete="${escapeHtml(path)}:${itemIndex}">${escapeHtml(ui('remove'))}</button>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function renderComponentAddButtons(parentPath = '', includeContainer = true) {
+  const parent = escapeHtml(parentPath);
+  const containerButton = includeContainer ? `<button type="button" data-component-add="container" data-component-parent="${parent}">${escapeHtml(ui('addContainer'))}</button>` : '';
+  return `
+    ${containerButton}
+    <button type="button" data-component-add="section" data-component-parent="${parent}">${escapeHtml(ui('addSection'))}</button>
+    <button type="button" data-component-add="thumbnail" data-component-parent="${parent}">${escapeHtml(ui('addThumbnail'))}</button>
+    <button type="button" data-component-add="text" data-component-parent="${parent}">${escapeHtml(ui('addTextBlock'))}</button>
+    <button type="button" data-component-add="gallery" data-component-parent="${parent}">${escapeHtml(ui('addMediaGallery'))}</button>
+    <button type="button" data-component-add="file" data-component-parent="${parent}">${escapeHtml(ui('addFile'))}</button>
+    <button type="button" data-component-add="separator" data-component-parent="${parent}">${escapeHtml(ui('addSeparator'))}</button>
+    <button type="button" data-component-add="button" data-component-parent="${parent}">${escapeHtml(ui('addLinkButton'))}</button>
+  `;
+}
+
+function childPath(parentPath, index) {
+  return parentPath ? `${parentPath}.${index}` : String(index);
+}
+
+function renderComponentList(components, parentPath = '') {
+  return components.map((component, index) => renderComponentEditor(component, childPath(parentPath, index))).join('');
+}
+
+function renderContainerChildren(component, path) {
+  const children = Array.isArray(component.components) ? component.components : [];
+  return `
+    <div class="container-builder">
+      <div class="mini-toolbar">
+        <strong>Container components</strong>
+        <div>${renderComponentAddButtons(path, false)}</div>
+      </div>
+      ${children.length ? `
+        <div class="component-nested-list">
+          ${renderComponentList(children, path)}
+        </div>
+      ` : `<div class="empty-state compact">Add Section, Text Display, Media Gallery, File, Separator or Link Button Row</div>`}
+    </div>
+  `;
+}
+
+function renderComponentEditor(component, path) {
+  const type = Number(component.type);
+  if (type === 10) {
+    return `
+      <article class="component-row">
+        ${renderComponentHead('Text Display', path)}
+        <textarea rows="3" data-component-prop="content" data-component-path="${escapeHtml(path)}">${escapeHtml(component.content || '')}</textarea>
+      </article>
+    `;
+  }
+
+  if (type === 14) {
+    return `
+      <article class="component-row">
+        ${renderComponentHead('Separator', path)}
+        <div class="component-subgrid">
+          <label>Spacing
+            <select data-component-prop="spacing" data-component-path="${escapeHtml(path)}">
+              ${selectOption(1, component.spacing || 1, 'Small')}
+              ${selectOption(2, component.spacing || 1, 'Large')}
+            </select>
+          </label>
+          <label class="inline-check"><input type="checkbox" data-component-prop="divider" data-component-path="${escapeHtml(path)}" ${component.divider !== false ? 'checked' : ''}> Divider line</label>
+        </div>
+      </article>
+    `;
+  }
+
+  if (type === 1) {
+    const buttons = Array.isArray(component.components) && component.components.length ? component.components : [{ type: 2, style: 5, label: 'Open link', url: '' }];
+    return `
+      <article class="component-row">
+        ${renderComponentHead('Link Button Row', path)}
+        <div class="link-button-list">
+          ${buttons.map((button, buttonIndex) => renderLinkButtonInputs(button, path, buttonIndex, buttons.length > 1)).join('')}
+        </div>
+        <button type="button" data-component-button-add="${escapeHtml(path)}">${escapeHtml(ui('addLinkButton'))}</button>
+      </article>
+    `;
+  }
+
+  if (type === 9) {
+    return `
+      <article class="component-row">
+        ${renderComponentHead('Section', path)}
+        <textarea rows="3" data-component-prop="components.0.content" data-component-path="${escapeHtml(path)}">${escapeHtml(component.components?.[0]?.content || '')}</textarea>
+        ${renderSectionAccessoryEditor(component, path)}
+      </article>
+    `;
+  }
+
+  if (type === 11) {
+    return `
+      <article class="component-row">
+        ${renderComponentHead('Thumbnail', path)}
+        <div class="component-subgrid">
+          <label>Media URL<input data-component-prop="media.url" data-component-path="${escapeHtml(path)}" value="${escapeHtml(component.media?.url || '')}" placeholder="https://example.com/image.png"></label>
+          <label>Description<input data-component-prop="description" data-component-path="${escapeHtml(path)}" value="${escapeHtml(component.description || '')}"></label>
+          <label class="inline-check"><input type="checkbox" data-component-prop="spoiler" data-component-path="${escapeHtml(path)}" ${component.spoiler ? 'checked' : ''}> Spoiler</label>
+        </div>
+      </article>
+    `;
+  }
+
+  if (type === 12) {
+    return `
+      <article class="component-row">
+        ${renderComponentHead('Media Gallery', path)}
+        ${renderMediaGalleryItems(component, path)}
+      </article>
+    `;
+  }
+
+  if (type === 13) {
+    return `
+      <article class="component-row">
+        ${renderComponentHead('File', path)}
+        <div class="component-subgrid">
+          <label>File URL<input data-component-prop="file.url" data-component-path="${escapeHtml(path)}" value="${escapeHtml(component.file?.url || '')}" placeholder="attachment://file.png"></label>
+          <label class="inline-check"><input type="checkbox" data-component-prop="spoiler" data-component-path="${escapeHtml(path)}" ${component.spoiler ? 'checked' : ''}> Spoiler</label>
+        </div>
+      </article>
+    `;
+  }
+
+  if (type === 17) {
+    return `
+      <article class="component-row component-container-editor">
+        ${renderComponentHead('Container', path)}
+        <div class="component-subgrid">
+          <label>Accent<input type="color" data-component-prop="accent_color" data-component-path="${escapeHtml(path)}" value="${escapeHtml(numberToHex(component.accent_color))}"></label>
+          <label class="inline-check"><input type="checkbox" data-component-prop="spoiler" data-component-path="${escapeHtml(path)}" ${component.spoiler ? 'checked' : ''}> Spoiler</label>
+        </div>
+        ${renderContainerChildren(component, path)}
+      </article>
+    `;
+  }
+
+  return `
+    <article class="component-row">
+      ${renderComponentHead(`Unsupported component ${type}`, path)}
+      <p class="editor-note">This block can be imported as JSON, but the visual editor cannot safely edit it.</p>
+    </article>
+  `;
+}
+
+function renderPreviewEmbed(embed) {
+  return `
+    <div class="preview-embed" style="--embed-color: ${escapeHtml(numberToHex(embed.color))}">
+      ${embed.author?.name ? `
+        <div class="preview-embed-author">
+          ${embed.author.icon_url ? `<img src="${escapeHtml(embed.author.icon_url)}" alt="">` : ''}
+          <span>${markdownPreview(embed.author.name)}</span>
+        </div>
+      ` : ''}
+      <div class="preview-embed-body">
+        <div>
+          ${embed.title ? `<strong>${markdownPreview(embed.title)}</strong>` : ''}
+          ${embed.description ? `<p>${markdownPreview(embed.description)}</p>` : ''}
+          ${(embed.fields || []).length ? `<div class="preview-fields">${embed.fields.map((field) => `
+            <div class="${field.inline ? 'inline' : ''}">
+              <b>${escapeHtml(field.name || 'Field')}</b>
+              <span>${markdownPreview(field.value || '')}</span>
+            </div>
+          `).join('')}</div>` : ''}
+          ${embed.image?.url ? `<img class="preview-embed-image" src="${escapeHtml(embed.image.url)}" alt="">` : ''}
+        </div>
+        ${embed.thumbnail?.url ? `<img class="preview-embed-thumb" src="${escapeHtml(embed.thumbnail.url)}" alt="">` : ''}
+      </div>
+      ${(embed.footer?.text || embed.timestamp) ? `
+        <div class="preview-embed-footer">
+          ${embed.footer?.icon_url ? `<img src="${escapeHtml(embed.footer.icon_url)}" alt="">` : ''}
+          <small>${escapeHtml([embed.footer?.text, embed.timestamp].filter(Boolean).join(' • '))}</small>
+        </div>
+      ` : ''}
+    </div>
+  `;
+}
+
+function renderPreviewButton(button) {
+  return `<span class="${button.disabled ? 'disabled' : ''}">${escapeHtml(button.label || 'Open link')}</span>`;
+}
+
+function renderPreviewComponent(component) {
+  const type = Number(component.type);
+  if (type === 10) return `<div class="preview-text-display">${markdownPreview(component.content || '')}</div>`;
+  if (type === 14) {
+    return `<div class="preview-separator ${component.divider === false ? 'no-divider' : ''} ${Number(component.spacing) === 2 ? 'large' : ''}"></div>`;
+  }
+  if (type === 1) {
+    return `<div class="preview-buttons">${(component.components || []).map(renderPreviewButton).join('')}</div>`;
+  }
+  if (type === 9) {
+    return `
+      <div class="preview-section">
+        <div>${(component.components || []).map(renderPreviewComponent).join('')}</div>
+        ${component.accessory ? `<div class="preview-accessory">${renderPreviewComponent(component.accessory)}</div>` : ''}
+      </div>
+    `;
+  }
+  if (type === 11) {
+    return `
+      <div class="preview-thumbnail">
+        ${component.media?.url ? `<img src="${escapeHtml(component.media.url)}" alt="">` : ''}
+        ${component.description ? `<small>${escapeHtml(component.description)}</small>` : ''}
+      </div>
+    `;
+  }
+  if (type === 12) {
+    return `
+      <div class="preview-gallery">
+        ${(component.items || []).map((item) => `
+          <figure>
+            ${item.media?.url ? `<img src="${escapeHtml(item.media.url)}" alt="">` : ''}
+            ${item.description ? `<figcaption>${escapeHtml(item.description)}</figcaption>` : ''}
+          </figure>
+        `).join('')}
+      </div>
+    `;
+  }
+  if (type === 13) {
+    return `<div class="preview-file">${escapeHtml(component.file?.url || 'attachment://file')}</div>`;
+  }
+  if (type === 17) {
+    return `
+      <div class="preview-container" style="--container-color: ${escapeHtml(numberToHex(component.accent_color))}">
+        ${(component.components || []).map(renderPreviewComponent).join('')}
+      </div>
+    `;
+  }
+  if (type === 2) return `<div class="preview-buttons">${renderPreviewButton(component)}</div>`;
+  return '';
+}
+
+function renderMessagePreview(payload) {
+  const components = Array.isArray(payload.components) ? payload.components : [];
+  const embeds = Array.isArray(payload.embeds) ? payload.embeds : [];
+  return `
+    <div class="discord-preview">
+      <div class="preview-author">
+        <span class="preview-avatar">C</span>
+        <strong>Self-hosted bot by Core</strong>
+        <small>BOT</small>
+      </div>
+      ${payload.content ? `<div class="preview-content">${markdownPreview(payload.content)}</div>` : ''}
+      ${embeds.map(renderPreviewEmbed).join('')}
+      ${components.length ? `<div class="preview-components">${components.map(renderPreviewComponent).join('')}</div>` : ''}
+      <div class="preview-footer">${markdownPreview(MESSAGE_BRAND_FOOTER)}</div>
+    </div>
+  `;
+}
+
+function renderMessageEditor(item) {
+  const slots = messageCatalog();
+  const slot = currentMessageSlot();
+  const template = slot ? getMessageTemplate(slot.key) : null;
+  const payload = normalizeEditorPayload(template?.payload || {});
+
+  if (!slot || !template) return `<div class="empty-state">${escapeHtml(ui('noMessageSlot'))}</div>`;
+
+  return `
+    <div class="message-editor">
+      <aside class="message-slots">
+        <div class="field-heading">
+          <span>${escapeHtml(ui('messageSlot'))}</span>
+          ${helpButton(item.key, ui('messageEditor'))}
+        </div>
+        ${renderMessageSlotList(slots)}
+      </aside>
+      <section class="message-workbench">
+        <div class="message-workbench-head">
+          <div>
+            <span class="eyebrow">${escapeHtml(slot.key)}</span>
+            <h2>${escapeHtml(localText(slot.title, slot.key))}</h2>
+            <p>${escapeHtml(localText(slot.description, ''))}</p>
+            <p class="editor-note">${escapeHtml(ui('actualPayloadNote'))}</p>
+          </div>
+          <div class="message-head-actions">
+            <label class="message-enabled">
+              <input type="checkbox" data-message-enabled ${template.enabled ? 'checked' : ''}>
+              <span>${escapeHtml(ui('messageEnabled'))}</span>
+            </label>
+            <button type="button" data-message-import>${escapeHtml(ui('importMessageJson'))}</button>
+            <button type="button" data-message-reset>${escapeHtml(ui('restoreDefault'))}</button>
+          </div>
+        </div>
+
+        <div class="message-editor-grid">
+          <div class="message-edit-column">
+            <section class="editor-block">
+              <div class="panel-title"><h2>${escapeHtml(ui('messageContent'))}</h2></div>
+              <textarea rows="5" data-message-content placeholder="Text, Markdown and {{tags}}">${escapeHtml(payload.content || '')}</textarea>
+              <div class="tag-cloud">
+                ${MESSAGE_TAGS.map((tag) => `<code>${escapeHtml(tag)}</code>`).join('')}
+              </div>
+              <div class="field">
+                <div class="field-heading"><span>${escapeHtml(ui('allowedMentions'))}</span></div>
+                ${renderAllowedMentions(payload)}
+              </div>
+            </section>
+
+            <section class="editor-block">
+              <div class="mini-toolbar">
+                <h2>${escapeHtml(ui('messageEmbeds'))}</h2>
+                <button type="button" data-embed-add>${escapeHtml(ui('addEmbed'))}</button>
+              </div>
+              ${payload.embeds.length ? payload.embeds.map(renderEmbedEditor).join('') : `<div class="empty-state compact">No embeds</div>`}
+            </section>
+
+            <section class="editor-block">
+              <div class="mini-toolbar">
+                <h2>${escapeHtml(ui('messageComponents'))}</h2>
+                <div>
+                  ${renderComponentAddButtons('', true)}
+                </div>
+              </div>
+              <p class="editor-note">${escapeHtml(ui('componentSafetyNote'))}</p>
+              <div class="component-list">
+                ${payload.components.length ? renderComponentList(payload.components) : `<div class="empty-state compact">No Components V2 blocks</div>`}
+              </div>
+            </section>
+          </div>
+
+          <aside class="message-preview-column">
+            <div class="panel-title"><h2>${escapeHtml(ui('messagePreview'))}</h2></div>
+            ${renderMessagePreview(payload)}
+          </aside>
+        </div>
+      </section>
+    </div>
+  `;
 }
 
 function renderWarnRulesField(item) {
@@ -1156,6 +1930,23 @@ function renderField(item) {
 
   if (item.type === 'warnRules') {
     return renderWarnRulesField(item);
+  }
+
+  if (item.type === 'messageEditor') {
+    return renderMessageEditor(item);
+  }
+
+  if (item.type === 'action') {
+    return `
+      <div class="field action-field">
+        <div class="field-heading">
+          <span>${escapeHtml(label)}</span>
+          ${helpButton(item.key, label)}
+        </div>
+        ${item.descriptionMap ? `<p>${escapeHtml(localText(item.descriptionMap, ''))}</p>` : ''}
+        <button type="button" class="primary" data-action="${escapeHtml(item.action || '')}">${escapeHtml(ui(item.buttonKey || 'setupScamTrap'))}</button>
+      </div>
+    `;
   }
 
   if (item.type === 'checkbox') {
@@ -1600,6 +2391,361 @@ async function setJsonExample(key, type) {
   pushLocalLog(t('copied'), 'system');
 }
 
+function refreshMessagePreview() {
+  const slot = currentMessageSlot();
+  const column = document.querySelector('.message-preview-column');
+  if (!slot || !column) return;
+  const payload = normalizeEditorPayload(getMessageTemplate(slot.key).payload);
+  column.innerHTML = `
+    <div class="panel-title"><h2>${escapeHtml(ui('messagePreview'))}</h2></div>
+    ${renderMessagePreview(payload)}
+  `;
+}
+
+function setNestedValue(target, pathValue, value) {
+  const pathParts = String(pathValue).split('.');
+  let cursor = target;
+  for (let index = 0; index < pathParts.length - 1; index += 1) {
+    const part = pathParts[index];
+    const nextPart = pathParts[index + 1];
+    if (!cursor[part] || typeof cursor[part] !== 'object') cursor[part] = /^\d+$/.test(nextPart) ? [] : {};
+    cursor = cursor[part];
+  }
+  const key = pathParts[pathParts.length - 1];
+  if (value === '') delete cursor[key];
+  else cursor[key] = value;
+}
+
+function mutateCurrentPayload(mutator, rerender = false) {
+  updateCurrentMessage((template) => {
+    template.payload = normalizeEditorPayload(template.payload);
+    mutator(template.payload, template);
+  }, rerender);
+  if (!rerender) refreshMessagePreview();
+}
+
+function updateMessageContent(value) {
+  mutateCurrentPayload((payload) => {
+    if (value) payload.content = value;
+    else delete payload.content;
+  });
+}
+
+function updateMessageEnabled(checked) {
+  updateCurrentMessage((template) => {
+    template.enabled = checked;
+  }, false);
+}
+
+function updateMentionParse(value, checked) {
+  mutateCurrentPayload((payload) => {
+    const set = new Set(payload.allowedMentions?.parse || []);
+    if (checked) set.add(value);
+    else set.delete(value);
+    payload.allowedMentions = {
+      ...(payload.allowedMentions || {}),
+      parse: [...set],
+      repliedUser: false
+    };
+  });
+}
+
+function addEmbed() {
+  mutateCurrentPayload((payload) => {
+    payload.embeds.push({
+      title: 'Title',
+      description: 'Description with {{tags}}',
+      color: 4433842,
+      fields: []
+    });
+  }, true);
+}
+
+function deleteEmbed(index) {
+  mutateCurrentPayload((payload) => {
+    payload.embeds.splice(index, 1);
+  }, true);
+}
+
+function updateEmbedProperty(index, property, value) {
+  mutateCurrentPayload((payload) => {
+    const embed = payload.embeds[index];
+    if (!embed) return;
+    setNestedValue(embed, property, property === 'color' ? hexToNumber(value) : value);
+  });
+}
+
+function addEmbedField(index) {
+  mutateCurrentPayload((payload) => {
+    const embed = payload.embeds[index];
+    if (!embed) return;
+    if (!Array.isArray(embed.fields)) embed.fields = [];
+    embed.fields.push({ name: 'Name', value: 'Value', inline: false });
+  }, true);
+}
+
+function deleteEmbedField(index, fieldIndex) {
+  mutateCurrentPayload((payload) => {
+    const fields = payload.embeds[index]?.fields;
+    if (!Array.isArray(fields)) return;
+    fields.splice(fieldIndex, 1);
+  }, true);
+}
+
+function updateEmbedField(index, fieldIndex, property, value, checked = false) {
+  mutateCurrentPayload((payload) => {
+    const field = payload.embeds[index]?.fields?.[fieldIndex];
+    if (!field) return;
+    field[property] = property === 'inline' ? checked : value;
+  });
+}
+
+function parseComponentPath(pathValue) {
+  if (pathValue === undefined || pathValue === null || pathValue === '') return [];
+  return String(pathValue)
+    .split('.')
+    .map((part) => Number(part))
+    .filter((part) => Number.isInteger(part) && part >= 0);
+}
+
+function componentAtPath(payload, pathValue, create = false) {
+  const parts = parseComponentPath(pathValue);
+  if (!parts.length) return null;
+  let list = payload.components;
+  let component = null;
+  for (let index = 0; index < parts.length; index += 1) {
+    if (!Array.isArray(list)) return null;
+    component = list[parts[index]];
+    if (!component) return null;
+    if (index < parts.length - 1) {
+      if (!Array.isArray(component.components)) {
+        if (!create) return null;
+        component.components = [];
+      }
+      list = component.components;
+    }
+  }
+  return component;
+}
+
+function componentChildrenAtPath(payload, parentPath = '', create = false) {
+  if (!parentPath) {
+    if (!Array.isArray(payload.components) && create) payload.components = [];
+    return payload.components;
+  }
+
+  const parent = componentAtPath(payload, parentPath, create);
+  if (!parent) return null;
+  if (!Array.isArray(parent.components)) {
+    if (!create) return null;
+    parent.components = [];
+  }
+  return parent.components;
+}
+
+function componentParentList(payload, pathValue, create = false) {
+  const parts = parseComponentPath(pathValue);
+  if (!parts.length) return null;
+  const parentPath = parts.slice(0, -1).join('.');
+  return componentChildrenAtPath(payload, parentPath, create);
+}
+
+function createComponent(type) {
+  if (type === 'text') return { type: 10, content: 'Text Display with {{tags}}' };
+  if (type === 'separator') return { type: 14, divider: true, spacing: 1 };
+  if (type === 'button') {
+    return {
+      type: 1,
+      components: [{ type: 2, style: 5, label: 'Open link', url: 'https://github.com/Novogrey/Self-hosted-bot-by-Core' }]
+    };
+  }
+  if (type === 'container') {
+    return {
+      type: 17,
+      accent_color: 4433842,
+      components: []
+    };
+  }
+  if (type === 'section') {
+    return {
+      type: 9,
+      components: [{ type: 10, content: 'Section text with {{tags}}' }],
+      accessory: { type: 2, style: 5, label: 'Open link', url: 'https://github.com/Novogrey/Self-hosted-bot-by-Core' }
+    };
+  }
+  if (type === 'thumbnail') {
+    return {
+      type: 9,
+      components: [{ type: 10, content: 'Section with thumbnail' }],
+      accessory: { type: 11, media: { url: '' }, description: 'Thumbnail' }
+    };
+  }
+  if (type === 'gallery') {
+    return {
+      type: 12,
+      items: [{ media: { url: '' }, description: 'Media item' }]
+    };
+  }
+  if (type === 'file') {
+    return {
+      type: 13,
+      file: { url: '' }
+    };
+  }
+  return null;
+}
+
+function addComponent(type, parentPath = '') {
+  mutateCurrentPayload((payload) => {
+    const list = componentChildrenAtPath(payload, parentPath, true);
+    const component = createComponent(type);
+    if (!Array.isArray(list) || !component) return;
+    list.push(component);
+  }, true);
+}
+
+function deleteComponent(pathValue) {
+  mutateCurrentPayload((payload) => {
+    const parts = parseComponentPath(pathValue);
+    const list = componentParentList(payload, pathValue);
+    if (!Array.isArray(list) || !parts.length) return;
+    list.splice(parts[parts.length - 1], 1);
+  }, true);
+}
+
+function coerceComponentProperty(property, value, checked = false) {
+  if (property === 'accent_color') return hexToNumber(value);
+  if (property === 'spacing') return Number(value) || 1;
+  if (property.endsWith('spoiler') || property === 'divider' || property === 'disabled') return Boolean(checked);
+  return value;
+}
+
+function updateComponentProperty(pathValue, property, value, checked = false) {
+  mutateCurrentPayload((payload) => {
+    const component = componentAtPath(payload, pathValue, true);
+    if (!component) return;
+    setNestedValue(component, property, coerceComponentProperty(property, value, checked));
+  });
+}
+
+function ensureLinkButton(button = {}) {
+  return {
+    type: 2,
+    style: 5,
+    label: button.label || 'Open link',
+    url: button.url || 'https://github.com/Novogrey/Self-hosted-bot-by-Core',
+    disabled: Boolean(button.disabled)
+  };
+}
+
+function updateComponentButtonProperty(pathValue, buttonIndex, property, value, checked = false) {
+  mutateCurrentPayload((payload) => {
+    const row = componentAtPath(payload, pathValue, true);
+    if (!row) return;
+    if (!Array.isArray(row.components)) row.components = [];
+    if (!row.components[buttonIndex]) row.components[buttonIndex] = ensureLinkButton();
+    const button = row.components[buttonIndex];
+    if (!button) return;
+    button.type = 2;
+    button.style = 5;
+    button[property] = property === 'disabled' ? Boolean(checked) : value;
+    delete button.custom_id;
+  });
+}
+
+function addComponentButton(pathValue) {
+  mutateCurrentPayload((payload) => {
+    const row = componentAtPath(payload, pathValue, true);
+    if (!row) return;
+    if (!Array.isArray(row.components)) row.components = [];
+    if (row.components.length >= 5) return;
+    row.components.push(ensureLinkButton({ label: `Link ${row.components.length + 1}` }));
+  }, true);
+}
+
+function deleteComponentButton(pathValue, buttonIndex) {
+  mutateCurrentPayload((payload) => {
+    const row = componentAtPath(payload, pathValue);
+    if (!Array.isArray(row?.components)) return;
+    row.components.splice(buttonIndex, 1);
+    if (!row.components.length) row.components.push(ensureLinkButton());
+  }, true);
+}
+
+function setSectionAccessoryType(pathValue, accessoryType) {
+  mutateCurrentPayload((payload) => {
+    const section = componentAtPath(payload, pathValue, true);
+    if (!section) return;
+    if (accessoryType === 'thumbnail') section.accessory = { type: 11, media: { url: '' }, description: '' };
+    if (accessoryType === 'button') section.accessory = ensureLinkButton();
+  }, true);
+}
+
+function updateSectionButtonProperty(pathValue, property, value, checked = false) {
+  mutateCurrentPayload((payload) => {
+    const section = componentAtPath(payload, pathValue, true);
+    if (!section) return;
+    section.accessory = ensureLinkButton(section.accessory);
+    section.accessory[property] = property === 'disabled' ? Boolean(checked) : value;
+    delete section.accessory.custom_id;
+  });
+}
+
+function addGalleryItem(pathValue) {
+  mutateCurrentPayload((payload) => {
+    const gallery = componentAtPath(payload, pathValue, true);
+    if (!gallery) return;
+    if (!Array.isArray(gallery.items)) gallery.items = [];
+    if (gallery.items.length >= 10) return;
+    gallery.items.push({ media: { url: '' }, description: `Media ${gallery.items.length + 1}` });
+  }, true);
+}
+
+function updateGalleryItem(pathValue, itemIndex, property, value, checked = false) {
+  mutateCurrentPayload((payload) => {
+    const gallery = componentAtPath(payload, pathValue, true);
+    if (!gallery) return;
+    if (!Array.isArray(gallery.items)) gallery.items = [];
+    if (!gallery.items[itemIndex]) gallery.items[itemIndex] = { media: { url: '' } };
+    const item = gallery.items[itemIndex];
+    if (property === 'url') {
+      if (!item.media) item.media = {};
+      if (value) item.media.url = value;
+      else delete item.media.url;
+      return;
+    }
+    if (property === 'spoiler') item.spoiler = Boolean(checked);
+    else if (value) item[property] = value;
+    else delete item[property];
+  });
+}
+
+function deleteGalleryItem(pathValue, itemIndex) {
+  mutateCurrentPayload((payload) => {
+    const gallery = componentAtPath(payload, pathValue);
+    if (!Array.isArray(gallery?.items)) return;
+    gallery.items.splice(itemIndex, 1);
+  }, true);
+}
+
+async function importMessageJson() {
+  const content = await coreCall('chooseJson', [], 60000);
+  if (!content) return;
+  const parsed = JSON.parse(content);
+  const payload = Array.isArray(parsed) ? { components: parsed } : parsed;
+  updateCurrentMessage((template) => {
+    template.enabled = true;
+    template.payload = normalizeEditorPayload(payload);
+  }, true);
+}
+
+function resetCurrentMessage() {
+  const slot = currentMessageSlot();
+  if (!slot) return;
+  resetMessageTemplate(slot.key);
+  renderView();
+}
+
 function showSaveConfirmation() {
   const button = document.querySelector('[data-save-button]');
   if (!button) return;
@@ -1619,6 +2765,8 @@ async function saveConfig() {
   const result = await coreCall('saveConfig', [state.env]);
   state.env = result.env;
   state.commands = result.commands;
+  state.messageCatalog = result.messageCatalog || state.messageCatalog;
+  state.version = result.version || state.version;
   updateChrome();
   return result;
 }
@@ -1640,6 +2788,14 @@ async function runAction(action) {
       const result = await coreCall('exportHosting', [state.env], 120000);
       if (result?.path) {
         pushLocalLog(`${ui('hostingExported')}: ${result.path} (${result.files || 0} files)`, 'system');
+      }
+      return;
+    }
+    if (action === 'setup-scam-trap') {
+      await saveConfig();
+      const result = await coreCall('setupScamTrapChannel', [state.env], 120000);
+      if (result?.channelId) {
+        pushLocalLog(`${ui('scamTrapConfigured')}: ${result.channelId}${result.messageId ? ` / ${result.messageId}` : ''}`, 'system');
       }
       return;
     }
@@ -1893,6 +3049,242 @@ function bindRenderedControls() {
     });
   });
 
+  document.querySelectorAll('[data-message-slot]').forEach((button) => {
+    bindOnce(button, 'click', 'MessageSlot', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      state.messageSlot = button.dataset.messageSlot;
+      renderView();
+    });
+  });
+
+  document.querySelectorAll('[data-message-enabled]').forEach((input) => {
+    bindOnce(input, 'change', 'MessageEnabled', (event) => {
+      event.stopPropagation();
+      updateMessageEnabled(input.checked);
+    });
+  });
+
+  document.querySelectorAll('[data-message-content]').forEach((input) => {
+    bindOnce(input, 'input', 'MessageContent', (event) => {
+      event.stopPropagation();
+      updateMessageContent(input.value);
+    });
+  });
+
+  document.querySelectorAll('[data-mention-parse]').forEach((input) => {
+    bindOnce(input, 'change', 'MentionParse', (event) => {
+      event.stopPropagation();
+      updateMentionParse(input.dataset.mentionParse, input.checked);
+    });
+  });
+
+  document.querySelectorAll('[data-embed-add]').forEach((button) => {
+    bindOnce(button, 'click', 'EmbedAdd', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      addEmbed();
+    });
+  });
+
+  document.querySelectorAll('[data-embed-delete]').forEach((button) => {
+    bindOnce(button, 'click', 'EmbedDelete', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      deleteEmbed(Number(button.dataset.embedDelete));
+    });
+  });
+
+  document.querySelectorAll('[data-embed-prop]').forEach((input) => {
+    bindOnce(input, 'input', 'EmbedProp', (event) => {
+      event.stopPropagation();
+      updateEmbedProperty(Number(input.dataset.embedIndex), input.dataset.embedProp, input.value);
+    });
+  });
+
+  document.querySelectorAll('[data-embed-add-field]').forEach((button) => {
+    bindOnce(button, 'click', 'EmbedAddField', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      addEmbedField(Number(button.dataset.embedAddField));
+    });
+  });
+
+  document.querySelectorAll('[data-embed-delete-field]').forEach((button) => {
+    bindOnce(button, 'click', 'EmbedDeleteField', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const [embedIndex, fieldIndex] = button.dataset.embedDeleteField.split(':').map(Number);
+      deleteEmbedField(embedIndex, fieldIndex);
+    });
+  });
+
+  document.querySelectorAll('[data-embed-field-prop]').forEach((input) => {
+    bindOnce(input, 'input', 'EmbedFieldProp', (event) => {
+      event.stopPropagation();
+      updateEmbedField(
+        Number(input.dataset.embedIndex),
+        Number(input.dataset.fieldIndex),
+        input.dataset.embedFieldProp,
+        input.value,
+        input.checked
+      );
+    });
+    bindOnce(input, 'change', 'EmbedFieldChange', (event) => {
+      event.stopPropagation();
+      updateEmbedField(
+        Number(input.dataset.embedIndex),
+        Number(input.dataset.fieldIndex),
+        input.dataset.embedFieldProp,
+        input.value,
+        input.checked
+      );
+    });
+  });
+
+  document.querySelectorAll('[data-component-add]').forEach((button) => {
+    bindOnce(button, 'click', 'ComponentAdd', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      addComponent(button.dataset.componentAdd, button.dataset.componentParent || '');
+    });
+  });
+
+  document.querySelectorAll('[data-component-delete]').forEach((button) => {
+    bindOnce(button, 'click', 'ComponentDelete', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      deleteComponent(button.dataset.componentDelete);
+    });
+  });
+
+  document.querySelectorAll('[data-component-prop]').forEach((input) => {
+    bindOnce(input, 'input', 'ComponentProp', (event) => {
+      event.stopPropagation();
+      updateComponentProperty(input.dataset.componentPath ?? input.dataset.componentIndex, input.dataset.componentProp, input.value, input.checked);
+    });
+    bindOnce(input, 'change', 'ComponentPropChange', (event) => {
+      event.stopPropagation();
+      updateComponentProperty(input.dataset.componentPath ?? input.dataset.componentIndex, input.dataset.componentProp, input.value, input.checked);
+    });
+  });
+
+  document.querySelectorAll('[data-section-accessory-type]').forEach((select) => {
+    bindOnce(select, 'change', 'SectionAccessoryType', (event) => {
+      event.stopPropagation();
+      setSectionAccessoryType(select.dataset.componentPath ?? select.dataset.componentIndex, select.value);
+    });
+  });
+
+  document.querySelectorAll('[data-component-button-prop]').forEach((input) => {
+    bindOnce(input, 'input', 'ComponentButtonProp', (event) => {
+      event.stopPropagation();
+      updateComponentButtonProperty(
+        input.dataset.componentPath ?? input.dataset.componentIndex,
+        Number(input.dataset.buttonIndex || 0),
+        input.dataset.componentButtonProp,
+        input.value,
+        input.checked
+      );
+    });
+    bindOnce(input, 'change', 'ComponentButtonChange', (event) => {
+      event.stopPropagation();
+      updateComponentButtonProperty(
+        input.dataset.componentPath ?? input.dataset.componentIndex,
+        Number(input.dataset.buttonIndex || 0),
+        input.dataset.componentButtonProp,
+        input.value,
+        input.checked
+      );
+    });
+  });
+
+  document.querySelectorAll('[data-section-button-prop]').forEach((input) => {
+    bindOnce(input, 'input', 'SectionButtonProp', (event) => {
+      event.stopPropagation();
+      updateSectionButtonProperty(input.dataset.componentPath ?? input.dataset.componentIndex, input.dataset.sectionButtonProp, input.value, input.checked);
+    });
+    bindOnce(input, 'change', 'SectionButtonChange', (event) => {
+      event.stopPropagation();
+      updateSectionButtonProperty(input.dataset.componentPath ?? input.dataset.componentIndex, input.dataset.sectionButtonProp, input.value, input.checked);
+    });
+  });
+
+  document.querySelectorAll('[data-component-button-add]').forEach((button) => {
+    bindOnce(button, 'click', 'ComponentButtonAdd', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      addComponentButton(button.dataset.componentButtonAdd);
+    });
+  });
+
+  document.querySelectorAll('[data-component-button-delete]').forEach((button) => {
+    bindOnce(button, 'click', 'ComponentButtonDelete', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const parts = button.dataset.componentButtonDelete.split(':');
+      const buttonIndex = Number(parts.pop());
+      deleteComponentButton(parts.join(':'), buttonIndex);
+    });
+  });
+
+  document.querySelectorAll('[data-gallery-item-add]').forEach((button) => {
+    bindOnce(button, 'click', 'GalleryItemAdd', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      addGalleryItem(button.dataset.galleryItemAdd);
+    });
+  });
+
+  document.querySelectorAll('[data-gallery-item-delete]').forEach((button) => {
+    bindOnce(button, 'click', 'GalleryItemDelete', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const parts = button.dataset.galleryItemDelete.split(':');
+      const itemIndex = Number(parts.pop());
+      deleteGalleryItem(parts.join(':'), itemIndex);
+    });
+  });
+
+  document.querySelectorAll('[data-gallery-item-prop]').forEach((input) => {
+    bindOnce(input, 'input', 'GalleryItemProp', (event) => {
+      event.stopPropagation();
+      updateGalleryItem(
+        input.dataset.componentPath ?? input.dataset.componentIndex,
+        Number(input.dataset.galleryIndex),
+        input.dataset.galleryItemProp,
+        input.value,
+        input.checked
+      );
+    });
+    bindOnce(input, 'change', 'GalleryItemChange', (event) => {
+      event.stopPropagation();
+      updateGalleryItem(
+        input.dataset.componentPath ?? input.dataset.componentIndex,
+        Number(input.dataset.galleryIndex),
+        input.dataset.galleryItemProp,
+        input.value,
+        input.checked
+      );
+    });
+  });
+
+  document.querySelectorAll('[data-message-import]').forEach((button) => {
+    bindOnce(button, 'click', 'MessageImport', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      importMessageJson().catch((error) => pushLocalLog(error.stack || error.message || String(error), 'stderr'));
+    });
+  });
+
+  document.querySelectorAll('[data-message-reset]').forEach((button) => {
+    bindOnce(button, 'click', 'MessageReset', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      resetCurrentMessage();
+    });
+  });
+
   document.querySelectorAll('[data-env]').forEach((input) => {
     bindOnce(input, 'input', 'EnvInput', (event) => {
       event.stopPropagation();
@@ -2079,8 +3471,10 @@ async function init() {
     const payload = await coreCall('loadConfig', [], 8000);
     state.env = payload.env || {};
     state.commands = payload.commands || [];
+    state.messageCatalog = payload.messageCatalog || [];
     state.logs = (payload.logs || []).slice(-MAX_LOG_LINES);
     state.status = payload.status || state.status;
+    state.version = payload.version || state.version;
 
     renderShell();
     renderView();

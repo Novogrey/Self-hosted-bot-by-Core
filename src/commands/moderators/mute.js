@@ -15,6 +15,7 @@ const path = require('path');
 const chalk = require('chalk');
 const userLanguageSchema = require('../../schemas/userLanguage');
 const tempMuteSchema = require('../../schemas/mute');
+const { moderationDmTags, sendModerationDm } = require('../../utils/moderationDmMessages');
 require('dotenv').config({ quiet: true });
 const {
   ADMIN_LOG_CHANNEL_ID,
@@ -201,7 +202,15 @@ module.exports = {
                 value: userTranslations.mute?.permmute || 'Permanent',
                 inline: true
               }].flat().map((field) => new TextDisplayBuilder().setContent(field?.value !== undefined && field?.value !== null ? `**${field?.name ?? 'Details'}**\n${String(field.value)}` : `**${field?.name ?? 'Details'}**`))).addSeparatorComponents(new SeparatorBuilder()).addTextDisplayComponents(new TextDisplayBuilder().setContent('-# ' + [`<t:${Math.floor(Date.now() / 1000)}:f>`].filter(Boolean).join(' | ')));
-              await target.send({
+              await sendModerationDm(target, 'moderation.mute.dm', moderationDmTags({
+                guild: interaction.guild,
+                target,
+                moderator: executor,
+                reason,
+                duration: userTranslations.mute?.permmute || 'Permanent',
+                expires: userTranslations.mute?.permmute || 'Permanent',
+                action: 'mute'
+              }), {
                 flags: MessageFlags.IsComponentsV2,
                 components: [embedmute]
               });
@@ -322,7 +331,15 @@ module.exports = {
                 value: `<t:${unmuteTimestamp}:R>`,
                 inline: true
               }].flat().map((field) => new TextDisplayBuilder().setContent(field?.value !== undefined && field?.value !== null ? `**${field?.name ?? 'Details'}**\n${String(field.value)}` : `**${field?.name ?? 'Details'}**`))).addSeparatorComponents(new SeparatorBuilder()).addTextDisplayComponents(new TextDisplayBuilder().setContent('-# ' + [`<t:${Math.floor(Date.now() / 1000)}:f>`].filter(Boolean).join(' | ')));
-              await target.send({
+              await sendModerationDm(target, 'moderation.mute.dm', moderationDmTags({
+                guild: interaction.guild,
+                target,
+                moderator: executor,
+                reason,
+                duration: durationText,
+                expires: `<t:${unmuteTimestamp}:R>`,
+                action: 'mute'
+              }), {
                 flags: MessageFlags.IsComponentsV2,
                 components: [embedmute]
               });

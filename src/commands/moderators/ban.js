@@ -22,6 +22,7 @@ const chalk = require('chalk');
 const userLanguageSchema = require('../../schemas/userLanguage');
 const tempBanSchema = require('../../schemas/ban');
 const warnSchema = require('../../schemas/warn');
+const { moderationDmTags, sendModerationDm } = require('../../utils/moderationDmMessages');
 const allowedRolesLevel1 = typeof ADMIN_ROLES_LEVEL_2 === 'string' && ADMIN_ROLES_LEVEL_2 ? ADMIN_ROLES_LEVEL_2.split(',') : []; // Разрешение на временный бан
 const allowedRolesLevel2 = typeof ADMIN_ROLES_LEVEL_1 === 'string' && ADMIN_ROLES_LEVEL_1 ? ADMIN_ROLES_LEVEL_1.split(',') : []; // Разрешение на перманентный бан
 const logChannelId = ADMIN_LOG_CHANNEL_ID;
@@ -162,7 +163,15 @@ module.exports = {
             value: userTranslations.ban.permanent || 'Permanent',
             inline: true
           }].flat().map((field) => new TextDisplayBuilder().setContent(field?.value !== undefined && field?.value !== null ? `**${field?.name ?? 'Details'}**\n${String(field.value)}` : `**${field?.name ?? 'Details'}**`))).addSeparatorComponents(new SeparatorBuilder()).addTextDisplayComponents(new TextDisplayBuilder().setContent('-# ' + [`<t:${Math.floor(Date.now() / 1000)}:f>`].filter(Boolean).join(' | ')));
-          await target.send({
+          await sendModerationDm(target, 'moderation.ban.dm', moderationDmTags({
+            guild: interaction.guild,
+            target,
+            moderator: executor,
+            reason,
+            duration: userTranslations.ban.permanent || 'Permanent',
+            expires: userTranslations.ban.permanent || 'Permanent',
+            action: 'ban'
+          }), {
             flags: MessageFlags.IsComponentsV2,
             components: [embedBan]
           }).catch((error) => {
@@ -265,7 +274,15 @@ module.exports = {
             value: `<t:${unbanTimestamp}:R>`,
             inline: true
           }].flat().map((field) => new TextDisplayBuilder().setContent(field?.value !== undefined && field?.value !== null ? `**${field?.name ?? 'Details'}**\n${String(field.value)}` : `**${field?.name ?? 'Details'}**`))).addSeparatorComponents(new SeparatorBuilder()).addTextDisplayComponents(new TextDisplayBuilder().setContent('-# ' + [`<t:${Math.floor(Date.now() / 1000)}:f>`].filter(Boolean).join(' | ')));
-          await target.send({
+          await sendModerationDm(target, 'moderation.ban.dm', moderationDmTags({
+            guild: interaction.guild,
+            target,
+            moderator: executor,
+            reason,
+            duration: durationText,
+            expires: `<t:${unbanTimestamp}:R>`,
+            action: 'ban'
+          }), {
             flags: MessageFlags.IsComponentsV2,
             components: [embedBan]
           }).catch((error) => {

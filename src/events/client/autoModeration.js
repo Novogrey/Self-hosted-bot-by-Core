@@ -8,6 +8,7 @@ const {
 } = require('discord.js');
 const chalk = require('chalk');
 const { getWarnPunishment } = require('../../utils/warnPunishments');
+const { buildCustomPayload, userTags } = require('../../utils/customMessages');
 const warnSchema = require('../../schemas/warn');
 const tempMuteSchema = require('../../schemas/mute');
 const tempBanSchema = require('../../schemas/ban');
@@ -65,6 +66,10 @@ function getConfig() {
       windowMs: numberEnv('AUTOMOD_SPAM_TIME_WINDOW_MS', 60000, 5000)
     }
   };
+}
+
+function scamTrapChannelId() {
+  return process.env.SCAM_AD_CHANNEL_ID || process.env.SCAM_AD_CHANNEL || '';
 }
 
 function getModel(connection, name, schema) {
@@ -254,11 +259,20 @@ async function sendUserNotice(message, reason, warningResult) {
     warningResult?.punishmentLabel ? `**Applied action**\n${warningResult.punishmentLabel}` : null
   ];
 
-  await message.author.send({
+  const fallbackPayload = {
     flags: MessageFlags.IsComponentsV2,
     components: [moderationContainer('Moderation notice', lines)],
     allowedMentions: { parse: [], repliedUser: false }
-  }).catch(() => null);
+  };
+
+  await message.author.send(buildCustomPayload('automod.dm.notice', {
+    server: message.guild.name,
+    serverid: message.guild.id,
+    reason,
+    warnid: warningResult?.warnId || '',
+    punishment: warningResult?.punishmentLabel || '',
+    ...userTags(message.author)
+  }, fallbackPayload)).catch(() => null);
 }
 
 async function sendLog(message, config, violations, warningResult, deleted) {
@@ -278,11 +292,24 @@ async function sendLog(message, config, violations, warningResult, deleted) {
     `**Message preview**\n${previewContent(message.content)}`
   ];
 
-  await channel.send({
+  const fallbackPayload = {
     flags: MessageFlags.IsComponentsV2 | MessageFlags.SuppressNotifications,
     components: [moderationContainer('Automoderation action', lines, '#43c7b2')],
     allowedMentions: { parse: [], repliedUser: false }
-  }).catch((error) => {
+  };
+
+  await channel.send(buildCustomPayload('automod.log', {
+    server: message.guild.name,
+    serverid: message.guild.id,
+    channel: `<#${message.channelId}>`,
+    channelid: message.channelId,
+    violations: violations.map((violation) => `- ${violation.label}: ${violation.detail}`).join('\n'),
+    deleted: deleted ? 'Yes' : 'No',
+    warnid: warningResult?.warnId || '',
+    punishment: warningResult?.punishmentLabel || '',
+    preview: previewContent(message.content),
+    ...userTags(message.author)
+  }, fallbackPayload)).catch((error) => {
     console.error(chalk.red(`[${new Date().toISOString()}] [AutoModeration] Failed to send log: ${error.message}`));
   });
 }
@@ -433,6 +460,7 @@ module.exports = {
   async execute(message, client) {
     const config = getConfig();
     if (!config.enabled || message.author.bot || !message.guild) return;
+    if (scamTrapChannelId() && message.channelId === scamTrapChannelId()) return;
 
     const member = message.member || await message.guild.members.fetch(message.author.id).catch(() => null);
     if (shouldBypass(member, config)) return;

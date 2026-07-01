@@ -18,6 +18,7 @@ const {
 const path = require('path');
 const fs = require('fs');
 const userLanguageSchema = require('../../schemas/userLanguage');
+const { moderationDmTags, sendModerationDm } = require('../../utils/moderationDmMessages');
 const allowedRoles = typeof ADMIN_ROLES_LEVEL_1 === 'string' && ADMIN_ROLES_LEVEL_1 ? ADMIN_ROLES_LEVEL_1.split(',') : [];
 const logChannelId = ADMIN_LOG_CHANNEL_ID;
 function loadTranslations(language) {
@@ -130,7 +131,15 @@ module.exports = {
           value: `${executor.tag}`,
           inline: true
         }].flat().map((field) => new TextDisplayBuilder().setContent(field?.value !== undefined && field?.value !== null ? `**${field?.name ?? 'Details'}**\n${String(field.value)}` : `**${field?.name ?? 'Details'}**`))).addSeparatorComponents(new SeparatorBuilder()).addTextDisplayComponents(new TextDisplayBuilder().setContent('-# ' + [`<t:${Math.floor(Date.now() / 1000)}:f>`].filter(Boolean).join(' | ')));
-        await target.send({
+        await sendModerationDm(target, 'moderation.kick.dm', moderationDmTags({
+          guild: interaction.guild,
+          target,
+          moderator: executor,
+          reason,
+          duration: 'Not applicable',
+          expires: 'Not applicable',
+          action: 'kick'
+        }), {
           flags: MessageFlags.IsComponentsV2,
           components: [embedkick]
         }).catch((error) => {

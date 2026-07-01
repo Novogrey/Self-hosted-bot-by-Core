@@ -12,6 +12,7 @@ contextBridge.exposeInMainWorld('coreBot', {
   chooseDatabase: () => ipcRenderer.invoke('dialog:chooseDatabase'),
   chooseJson: () => ipcRenderer.invoke('dialog:chooseJson'),
   exportHosting: (env) => ipcRenderer.invoke('hosting:export', env),
+  setupScamTrapChannel: (env) => ipcRenderer.invoke('scamTrap:setupChannel', env),
   openExternal: (url) => ipcRenderer.invoke('shell:openExternal', url),
   onLogLine: (callback) => {
     const listener = (_event, payload) => callback(payload);

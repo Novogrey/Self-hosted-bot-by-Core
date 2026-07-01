@@ -6,6 +6,7 @@ const { cacheInteractionLocale, syncInteractionLocale } = require('../../utils/d
 const { getTargetGuildId } = require('../../utils/botRuntimeConfig');
 const { getActiveBotAccessBlock, replyWithBotAccessBlock } = require('../../utils/botAccessBlocks');
 const { buildStatusComponents, formatTemplate, v2Flags } = require('../../utils/localizedComponents');
+const { buildCustomPayload, installInteractionMessageOverrides } = require('../../utils/customMessages');
 
 const TARGET_GUILD_ID = getTargetGuildId();
 
@@ -22,12 +23,15 @@ async function replyWithError(interaction, translations) {
       description: t.errorDescription || 'Something went wrong while executing this interaction.'
     })
   };
+  const customPayload = buildCustomPayload('system.error', {
+    original: t.errorDescription || 'Something went wrong while executing this interaction.'
+  }, payload);
 
   if (interaction.deferred || interaction.replied) {
-    return interaction.followUp(payload).catch(() => null);
+    return interaction.followUp(customPayload).catch(() => null);
   }
 
-  return interaction.reply(payload).catch(() => null);
+  return interaction.reply(customPayload).catch(() => null);
 }
 
 function isUnknownInteraction(error) {
@@ -93,7 +97,7 @@ module.exports = {
 
       if (command.scope !== 'global' && (!TARGET_GUILD_ID || interaction.guildId !== TARGET_GUILD_ID)) {
         const t = translations.system || {};
-        return interaction.reply({
+        const payload = {
           flags: v2Flags(true),
           components: buildStatusComponents({
             title: t.guildOnlyTitle || 'Command unavailable here',
@@ -104,11 +108,16 @@ module.exports = {
               { guildId: TARGET_GUILD_ID }
             )
           })
-        }).catch(() => null);
+        };
+        return interaction.reply(buildCustomPayload('system.guildOnly', {
+          command: interaction.commandName,
+          serverid: TARGET_GUILD_ID || ''
+        }, payload)).catch(() => null);
       }
 
       try {
         logPublicCommandUsage(interaction, command);
+        installInteractionMessageOverrides(interaction, command.data?.name || interaction.commandName);
         await command.execute(interaction, client);
         void logCoreModeratorCommand(interaction, command, 'completed').catch((logError) => {
           console.error(`[${new Date().toISOString()}] Failed to log Core moderator command: ${logError.message}`);

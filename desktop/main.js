@@ -3,6 +3,10 @@ const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
 const zlib = require('zlib');
+const { REST } = require('@discordjs/rest');
+const { PermissionFlagsBits, Routes } = require('discord-api-types/v10');
+const { buildCustomPayload, messageCatalogForCommands } = require('../src/utils/customMessages');
+const { defaultScamTrapNoticePayload } = require('../src/utils/scamTrapMessages');
 
 app.commandLine.appendSwitch('js-flags', '--max-old-space-size=192');
 
@@ -53,6 +57,7 @@ const HOSTING_EXPORT_ENV_KEYS = [
   'AUTOMOD_SPAM_ENABLED',
   'AUTOMOD_SPAM_MESSAGE_LIMIT',
   'AUTOMOD_SPAM_TIME_WINDOW_MS',
+  'SCAM_AD_CHANNEL_ID',
   'BOT_STATUS',
   'BOT_ACTIVITY_TYPE',
   'BOT_ACTIVITY_TEXT',
@@ -61,6 +66,8 @@ const HOSTING_EXPORT_ENV_KEYS = [
   'WELCOME_SERVER_ENABLED',
   'WELCOME_SERVER_CHANNEL_ID',
   'WELCOME_SERVER_JSON',
+  'CUSTOM_MESSAGES_JSON',
+  'CUSTOM_MESSAGES_RESET_AT',
   'SQL_BACKUP_ENABLED',
   'SQL_BACKUP_CHANNEL_ID',
   'SQL_BACKUP_DEBOUNCE_MS'
@@ -183,6 +190,7 @@ function loadEnv() {
     AUTOMOD_SPAM_ENABLED: 'true',
     AUTOMOD_SPAM_MESSAGE_LIMIT: '5',
     AUTOMOD_SPAM_TIME_WINDOW_MS: '60000',
+    SCAM_AD_CHANNEL_ID: '',
     BOT_STATUS: 'online',
     BOT_ACTIVITY_TYPE: 'Watching',
     BOT_ACTIVITY_TEXT: 'self-hosted moderation',
@@ -191,6 +199,8 @@ function loadEnv() {
     WELCOME_SERVER_ENABLED: 'false',
     WELCOME_SERVER_CHANNEL_ID: '',
     WELCOME_SERVER_JSON: '',
+    CUSTOM_MESSAGES_JSON: '',
+    CUSTOM_MESSAGES_RESET_AT: '',
     ...env
   };
 }
@@ -211,6 +221,7 @@ function saveEnv(env) {
   const nextEnv = { ...(env || {}) };
   nextEnv.WELCOME_DM_JSON = compactJsonEnvValue(nextEnv.WELCOME_DM_JSON);
   nextEnv.WELCOME_SERVER_JSON = compactJsonEnvValue(nextEnv.WELCOME_SERVER_JSON);
+  nextEnv.CUSTOM_MESSAGES_JSON = compactJsonEnvValue(nextEnv.CUSTOM_MESSAGES_JSON);
   for (const key of ['AUTOMOD_BAD_WORDS', 'AUTOMOD_LINKS_ALLOWED_DOMAINS', 'AUTOMOD_BYPASS_ROLE_IDS']) {
     if (Object.prototype.hasOwnProperty.call(nextEnv, key)) {
       nextEnv[key] = String(nextEnv[key] || '')
@@ -424,6 +435,20 @@ function hostingReadme() {
   ].join('\n');
 }
 
+function discordRestMessageBody(payload) {
+  const body = { ...(payload || {}) };
+  if (body.allowedMentions) {
+    body.allowed_mentions = {
+      parse: Array.isArray(body.allowedMentions.parse) ? body.allowedMentions.parse : [],
+      users: Array.isArray(body.allowedMentions.users) ? body.allowedMentions.users : undefined,
+      roles: Array.isArray(body.allowedMentions.roles) ? body.allowedMentions.roles : undefined,
+      replied_user: Boolean(body.allowedMentions.repliedUser)
+    };
+    delete body.allowedMentions;
+  }
+  return body;
+}
+
 async function exportHostingArchive(env) {
   const savedEnv = saveEnv(env || loadEnv());
   const result = await dialog.showSaveDialog(mainWindow, {
@@ -467,6 +492,71 @@ async function exportHostingArchive(env) {
   const fileCount = writeZipArchive(entries, result.filePath);
   pushLog(`Hosting ZIP exported: ${result.filePath}`, 'system');
   return { path: result.filePath, files: fileCount };
+}
+
+async function setupScamTrapChannel(env) {
+  const savedEnv = saveEnv(env || loadEnv());
+  const token = String(savedEnv.DISCORD_TOKEN || savedEnv.token || '').trim();
+  const guildId = String(savedEnv.GUILD_ID || '').trim();
+  const channelId = String(savedEnv.SCAM_AD_CHANNEL_ID || savedEnv.SCAM_AD_CHANNEL || '').trim();
+
+  if (!token) throw new Error('DISCORD_TOKEN is required before configuring the scam trap channel.');
+  if (!guildId) throw new Error('GUILD_ID is required before configuring the scam trap channel.');
+  if (!channelId) throw new Error('SCAM_AD_CHANNEL_ID is required before configuring the scam trap channel.');
+
+  const rest = new REST({ version: '10' }).setToken(token);
+  const channel = await rest.get(Routes.channel(channelId));
+  if (channel.guild_id && String(channel.guild_id) !== guildId) {
+    throw new Error('The configured scam trap channel does not belong to GUILD_ID.');
+  }
+
+  const everyoneAllow = (
+    PermissionFlagsBits.ViewChannel
+    | PermissionFlagsBits.SendMessages
+    | PermissionFlagsBits.ReadMessageHistory
+  ).toString();
+
+  await rest.patch(Routes.channel(channelId), {
+    body: {
+      permission_overwrites: [
+        {
+          id: guildId,
+          type: 0,
+          allow: everyoneAllow,
+          deny: '0'
+        }
+      ]
+    }
+  });
+
+  let movedToTop = false;
+  try {
+    await rest.patch(Routes.guildChannels(guildId), {
+      body: [{ id: channelId, position: 0 }]
+    });
+    movedToTop = true;
+  } catch (error) {
+    pushLog(`Scam trap channel position was not changed: ${error.message}`, 'stderr');
+  }
+
+  const payload = buildCustomPayload('scamTrap.notice', {
+    server: channel.guild_id || guildId,
+    serverid: guildId,
+    channel: `<#${channelId}>`,
+    channelid: channelId
+  }, defaultScamTrapNoticePayload(), savedEnv.CUSTOM_MESSAGES_JSON);
+
+  const message = await rest.post(Routes.channelMessages(channelId), {
+    body: discordRestMessageBody(payload)
+  });
+  pushLog(`Scam trap channel configured and warning message sent: ${channelId}`, 'system');
+
+  return {
+    channelId,
+    messageId: message?.id || '',
+    permissionsUpdated: true,
+    movedToTop
+  };
 }
 
 function commandNameFromSource(source) {
@@ -670,21 +760,30 @@ function registerIpc(channel, handler) {
   });
 }
 
-registerIpc('config:load', () => ({
-  env: loadEnv(),
-  envPath,
-  dataDir,
-  commands: scanCommands(),
-  status: { status: botStatus, pid: botProcess?.pid || null },
-  logs: logBuffer
-}));
+registerIpc('config:load', () => {
+  const env = loadEnv();
+  const commands = scanCommands(env);
+  return {
+    env,
+    envPath,
+    dataDir,
+    version: app.getVersion(),
+    commands,
+    messageCatalog: messageCatalogForCommands(commands),
+    status: { status: botStatus, pid: botProcess?.pid || null },
+    logs: logBuffer
+  };
+});
 
 registerIpc('config:save', (_event, env) => {
   const saved = saveEnv(env || {});
+  const commands = scanCommands(saved);
   pushLog('Settings saved from UI', 'system');
   return {
     env: saved,
-    commands: scanCommands(saved)
+    version: app.getVersion(),
+    commands,
+    messageCatalog: messageCatalogForCommands(commands)
   };
 });
 
@@ -708,6 +807,7 @@ registerIpc('bot:restart', () => {
 registerIpc('bot:status', () => ({ status: botStatus, pid: botProcess?.pid || null }));
 registerIpc('shell:openExternal', (_event, url) => shell.openExternal(url));
 registerIpc('hosting:export', (_event, env) => exportHostingArchive(env || loadEnv()));
+registerIpc('scamTrap:setupChannel', (_event, env) => setupScamTrapChannel(env || loadEnv()));
 registerIpc('dialog:chooseDatabase', async () => {
   const result = await dialog.showSaveDialog(mainWindow, {
     title: 'SQLite database',
@@ -720,7 +820,7 @@ registerIpc('dialog:chooseDatabase', async () => {
 
 registerIpc('dialog:chooseJson', async () => {
   const result = await dialog.showOpenDialog(mainWindow, {
-    title: 'Load welcome JSON',
+    title: 'Load Discord message JSON',
     properties: ['openFile'],
     filters: [{ name: 'JSON message', extensions: ['json'] }]
   });

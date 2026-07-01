@@ -19,6 +19,7 @@ const warnSchema = require('../../schemas/warn');
 const tempMuteSchema = require('../../schemas/mute');
 const tempBanSchema = require('../../schemas/ban');
 const { getWarnPunishment } = require('../../utils/warnPunishments');
+const { moderationDmTags, sendModerationDm } = require('../../utils/moderationDmMessages');
 require('dotenv').config({ quiet: true });
 const {
   ADMIN_LOG_CHANNEL_ID,
@@ -223,7 +224,16 @@ module.exports = {
             value: expirationMessage,
             inline: true
           }].flat().map((field) => new TextDisplayBuilder().setContent(field?.value !== undefined && field?.value !== null ? `**${field?.name ?? 'Details'}**\n${String(field.value)}` : `**${field?.name ?? 'Details'}**`))).addSeparatorComponents(new SeparatorBuilder()).addTextDisplayComponents(new TextDisplayBuilder().setContent('-# ' + [`<t:${Math.floor(Date.now() / 1000)}:f>`].filter(Boolean).join(' | ')));
-          await target.send({
+          await sendModerationDm(target, 'moderation.warn.dm', moderationDmTags({
+            guild: interaction.guild,
+            target,
+            moderator: moderatorUser,
+            reason,
+            duration: expirationMessage,
+            expires: expirationMessage,
+            warnId: nextWarnID,
+            action: 'warn'
+          }), {
             flags: MessageFlags.IsComponentsV2,
             components: [embed]
           }).catch((error) => {
@@ -307,7 +317,17 @@ module.exports = {
               value: `<t:${unmuteTimestamp}:R>`,
               inline: true
             }].flat().map((field) => new TextDisplayBuilder().setContent(field?.value !== undefined && field?.value !== null ? `**${field?.name ?? 'Details'}**\n${String(field.value)}` : `**${field?.name ?? 'Details'}**`))).addSeparatorComponents(new SeparatorBuilder()).addTextDisplayComponents(new TextDisplayBuilder().setContent('-# ' + [`<t:${Math.floor(Date.now() / 1000)}:f>`].filter(Boolean).join(' | ')));
-            await target.send({
+            await sendModerationDm(target, 'moderation.warnMute.dm', moderationDmTags({
+              guild: interaction.guild,
+              target,
+              moderator: moderatorUser,
+              reason,
+              duration: `<t:${unmuteTimestamp}:R>`,
+              expires: `<t:${unmuteTimestamp}:R>`,
+              warnId: nextWarnID,
+              count: warningCount,
+              action: 'warn-mute'
+            }), {
               flags: MessageFlags.IsComponentsV2,
               components: [embedMute]
             }).catch((error) => {
@@ -371,7 +391,17 @@ module.exports = {
               value: `<t:${unbanTimestamp}:R>`,
               inline: true
             }].flat().map((field) => new TextDisplayBuilder().setContent(field?.value !== undefined && field?.value !== null ? `**${field?.name ?? 'Details'}**\n${String(field.value)}` : `**${field?.name ?? 'Details'}**`))).addSeparatorComponents(new SeparatorBuilder()).addTextDisplayComponents(new TextDisplayBuilder().setContent('-# ' + [`<t:${Math.floor(Date.now() / 1000)}:f>`].filter(Boolean).join(' | ')));
-            await target.send({
+            await sendModerationDm(target, 'moderation.warnBan.dm', moderationDmTags({
+              guild: interaction.guild,
+              target,
+              moderator: moderatorUser,
+              reason,
+              duration: `<t:${unbanTimestamp}:R>`,
+              expires: `<t:${unbanTimestamp}:R>`,
+              warnId: nextWarnID,
+              count: warningCount,
+              action: 'warn-ban'
+            }), {
               flags: MessageFlags.IsComponentsV2,
               components: [embedBan]
             }).catch((error) => {
@@ -431,7 +461,17 @@ module.exports = {
               value: `**${moderatorUser.tag}** (<@${moderatorUser.id}>)`,
               inline: true
             }].flat().map((field) => new TextDisplayBuilder().setContent(field?.value !== undefined && field?.value !== null ? `**${field?.name ?? 'Details'}**\n${String(field.value)}` : `**${field?.name ?? 'Details'}**`))).addSeparatorComponents(new SeparatorBuilder()).addTextDisplayComponents(new TextDisplayBuilder().setContent('-# ' + [`<t:${Math.floor(Date.now() / 1000)}:f>`].filter(Boolean).join(' | ')));
-            await target.send({
+            await sendModerationDm(target, 'moderation.warnBan.dm', moderationDmTags({
+              guild: interaction.guild,
+              target,
+              moderator: moderatorUser,
+              reason,
+              duration: userTranslations.warn?.permanent || 'Permanent',
+              expires: userTranslations.warn?.permanent || 'Permanent',
+              warnId: nextWarnID,
+              count: warningCount,
+              action: 'warn-permanent-ban'
+            }), {
               flags: MessageFlags.IsComponentsV2,
               components: [embedBan]
             }).catch((error) => {

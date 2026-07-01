@@ -1,6 +1,6 @@
 const { MessageFlags } = require('discord.js');
 
-const BRAND_FOOTER = '-# [Self-hosted bot by Core](https://discord.gg/YF8krDPCZh)';
+const BRAND_FOOTER = '-# Created by [Self-hosted bot by Core](https://github.com/Novogrey/Self-hosted-bot-by-Core)';
 const COMPONENT_TYPES = {
   ActionRow: 1,
   TextDisplay: 10,
@@ -34,6 +34,16 @@ function separator() {
   return { type: COMPONENT_TYPES.Separator };
 }
 
+function includesBrand(value) {
+  return String(value || '').includes('Self-hosted bot by Core');
+}
+
+function appendBrandText(value) {
+  const text = String(value || '').trim();
+  if (includesBrand(text)) return text;
+  return [text, BRAND_FOOTER].filter(Boolean).join('\n\n').slice(0, 4000);
+}
+
 function containerWithText(content) {
   return {
     type: COMPONENT_TYPES.Container,
@@ -60,6 +70,15 @@ function appendFooterToContainer(component) {
   };
 }
 
+function appendFooterComponents(components) {
+  if (components.some(hasBrandFooter)) return components;
+  return [
+    ...components,
+    separator(),
+    textDisplay(BRAND_FOOTER)
+  ];
+}
+
 function brandPayload(payload) {
   if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return payload;
 
@@ -76,19 +95,33 @@ function brandPayload(payload) {
     return next;
   }
 
-  if (!components.length) return next;
+  if (!components.length) {
+    if (typeof next.content === 'string') {
+      next.content = appendBrandText(next.content);
+    } else if (Array.isArray(next.embeds) && next.embeds.length) {
+      const lastIndex = next.embeds.length - 1;
+      const lastEmbed = { ...next.embeds[lastIndex] };
+      lastEmbed.description = appendBrandText(lastEmbed.description || '\u200b');
+      next.embeds = [...next.embeds.slice(0, lastIndex), lastEmbed];
+    } else {
+      next.content = BRAND_FOOTER;
+    }
+    return next;
+  }
 
   if (components.some(hasBrandFooter)) return next;
 
+  if (!isV2 && !components.some((component) => component?.type === COMPONENT_TYPES.Container)) {
+    next.content = appendBrandText(next.content || '');
+    return next;
+  }
+
   if (isV2 || components.some((component) => component?.type === COMPONENT_TYPES.Container)) {
     next.flags = flags | MessageFlags.IsComponentsV2;
-    next.components = components.map((component, index) => {
-      if (component?.type === COMPONENT_TYPES.Container) return appendFooterToContainer(component);
-      if (index === 0) {
-        return containerWithText(hasContent ? next.content : '\u200b');
-      }
-      return component;
-    });
+    const v2Components = hasContent ? [textDisplay(next.content), ...components] : components;
+    next.components = appendFooterComponents(v2Components.map((component) => (
+      component?.type === COMPONENT_TYPES.Container ? appendFooterToContainer(component) : component
+    )));
     if (hasContent) delete next.content;
   }
 

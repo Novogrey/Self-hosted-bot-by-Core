@@ -34,7 +34,10 @@
 - Поддержка светлой и тёмной темы.
 - Языки интерфейса: русский, английский, немецкий, украинский.
 - Управление процессом: запуск, перезапуск, остановка, аварийная остановка.
-- Раздельные JSON-шаблоны приветствий для личных сообщений и серверного канала.
+- Визуальный редактор сообщений для приветствий, системных ответов и ответов slash-команд.
+- Поддержка обычного текста, embeds, Components V2, предпросмотра и отката сообщений к дефолту.
+- Безопасные link buttons: пользовательские `custom_id` кнопки, select menus и text inputs блокируются.
+- Обязательный footer: `Created by Self-hosted bot by Core` со ссылкой на GitHub.
 - Настройка статуса и активности Discord-бота.
 - Визуальный редактор правил предупреждений.
 - Автомодерация упоминаний, нецензурной лексики, ссылок, приглашений в Discord и спама.
@@ -74,45 +77,23 @@
 
 После успешного запуска в журнале приложения отображается ссылка приглашения бота с правами администратора.
 
-## Приветствия
+## Редактор сообщений
 
-Приложение поддерживает два независимых JSON-шаблона:
+Карточка **Редактор сообщений** позволяет настраивать сообщения бота без ручного написания JSON:
 
-- **Личное приветствие** - отправляется новому участнику в личные сообщения.
-- **Серверное приветствие** - отправляется в указанный текстовый канал.
+- личное и серверное приветствие;
+- системные ответы;
+- ответы каждой slash-команды;
+- сообщения автомодерации;
+- обычный текст, embeds, Components V2 text blocks, separators и link buttons;
+- живое превью перед сохранением;
+- откат любого сообщения к дефолтному состоянию.
 
-Поддерживаемые форматы:
+Для совместимости можно импортировать Discord message JSON из внешних генераторов, после чего сообщение редактируется через интерфейс. Runtime разрешает только link buttons и блокирует пользовательские `custom_id` кнопки, select menus и text inputs, чтобы не ломать функциональные кнопки команд.
 
-- обычный Discord message payload;
-- `embeds`;
-- Components V2 payload.
+Доступные теги включают:
 
-Пример:
-
-```json
-{
-  "content": "Привет, {{mention}}. Добро пожаловать на сервер **{{server}}**.",
-  "embeds": [
-    {
-      "title": "Новый участник: {{displayname}}",
-      "description": "Discord ID: {{userid}}\nУчастников на сервере: {{membercount}}",
-      "color": 4433842,
-      "thumbnail": {
-        "url": "{{avatar}}"
-      }
-    }
-  ],
-  "allowedMentions": {
-    "users": ["{{userid}}"],
-    "roles": [],
-    "repliedUser": false
-  }
-}
-```
-
-Доступные теги:
-
-`{{username}}`, `{{displayname}}`, `{{globalname}}`, `{{userid}}`, `{{mention}}`, `{{tag}}`, `{{avatar}}`, `{{server}}`, `{{serverid}}`, `{{membercount}}`, `{{joindate}}`, `{{joinedrelative}}`, `{{createdat}}`, `{{createdrelative}}`, `{{guildicon}}`, `{{guildbanner}}`.
+`{{username}}`, `{{displayname}}`, `{{globalname}}`, `{{userid}}`, `{{mention}}`, `{{tag}}`, `{{avatar}}`, `{{server}}`, `{{serverid}}`, `{{membercount}}`, `{{moderator}}`, `{{moderatorid}}`, `{{moderatormention}}`, `{{reason}}`, `{{duration}}`, `{{expires}}`, `{{warnid}}`, `{{count}}`, `{{results}}`, `{{original}}`, `{{command}}`, `{{channel}}`, `{{channelid}}`, `{{violations}}`, `{{deleted}}`, `{{preview}}`, `{{timestamp}}`.
 
 ## Уровни доступа AdminRole
 
@@ -195,7 +176,10 @@ npm start
 - Light and dark interface themes.
 - UI languages: Russian, English, German, Ukrainian.
 - Start, restart, stop, and emergency stop controls.
-- Separate JSON welcome templates for DM and server channel messages.
+- Visual message editor for welcomes, system responses, and slash-command replies.
+- Plain content, embeds, Components V2, live preview, and reset-to-default support.
+- Safe link buttons: custom `custom_id` buttons, select menus, and text inputs are blocked.
+- Mandatory footer: `Created by Self-hosted bot by Core` linked to GitHub.
 - Bot presence and activity configuration.
 - Visual warning-rule editor.
 - Automoderation for pings, bad words, links, Discord invites, and spam.
@@ -234,6 +218,24 @@ If the app is already installed, use the updater executable. For portable builds
 11. Click **Start**.
 
 After startup, the application log displays the administrator invite URL.
+
+## Message Editor
+
+The **Message Editor** card lets users customize bot messages without manually writing JSON:
+
+- DM and server welcomes;
+- system responses;
+- every slash-command response;
+- automoderation messages;
+- plain content, embeds, Components V2 text blocks, separators, and link buttons;
+- live preview before saving;
+- reset any message back to its default state.
+
+Discord message JSON can still be imported from external generators for compatibility, then edited through the interface. Runtime only allows link buttons and blocks user-defined `custom_id` buttons, select menus, and text inputs so functional command buttons cannot be broken.
+
+Supported tags include:
+
+`{{username}}`, `{{displayname}}`, `{{globalname}}`, `{{userid}}`, `{{mention}}`, `{{tag}}`, `{{avatar}}`, `{{server}}`, `{{serverid}}`, `{{membercount}}`, `{{moderator}}`, `{{moderatorid}}`, `{{moderatormention}}`, `{{reason}}`, `{{duration}}`, `{{expires}}`, `{{warnid}}`, `{{count}}`, `{{results}}`, `{{original}}`, `{{command}}`, `{{channel}}`, `{{channelid}}`, `{{violations}}`, `{{deleted}}`, `{{preview}}`, `{{timestamp}}`.
 
 ## Hosting Export
 
