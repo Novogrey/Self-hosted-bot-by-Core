@@ -1,39 +1,36 @@
 name: Discord Release Notification
-
 on:
   release:
     types: [published]
-
 jobs:
   notify:
     runs-on: ubuntu-latest
-
     steps:
       - name: Send release to Discord
         shell: bash
+        env:
+          RELEASE_TITLE: ${{ github.event.release.name }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          RELEASE_URL: ${{ github.event.release.html_url }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
           set -euo pipefail
-
           BODY=$(jq -r '.release.body // ""' "$GITHUB_EVENT_PATH")
-
           CHANGES=$(echo "$BODY" | awk '
             /<!-- DISCORD_START -->/{flag=1; next}
             /<!-- DISCORD_END -->/{flag=0}
             flag
           ')
-
           if [ -z "$CHANGES" ]; then
             CHANGES="No changelog provided."
           fi
-
           CHANGES=$(echo "$CHANGES" | head -c 3500)
-
           CONTENT=$(jq -Rs . <<< "$CHANGES")
 
           PAYLOAD=$(jq -n \
-            --arg title "${{ github.event.release.name }}" \
-            --arg version "${{ github.event.release.tag_name }}" \
-            --arg url "${{ github.event.release.html_url }}" \
+            --arg title "$RELEASE_TITLE" \
+            --arg version "$RELEASE_TAG" \
+            --arg url "$RELEASE_URL" \
             --argjson content "$CONTENT" \
             '{
               content: "<@&1519341297188470874>",
@@ -46,11 +43,9 @@ jobs:
                   title: ("🚀 " + $title),
                   url: $url,
                   color: 5793266,
-
                   thumbnail: {
                     url: "https://cdn.discordapp.com/attachments/1452039397435244677/1458169510447153255/ChatGPT_Image_20_._2025_._17_38_56_1.png"
                   },
-
                   fields: [
                     {
                       name: "📦 Version",
@@ -63,9 +58,7 @@ jobs:
                       inline: true
                     }
                   ],
-
                   description: ("## 🆕 Changelog\n\n" + $content),
-
                   footer: {
                     text: "Core Release System"
                   }
@@ -76,4 +69,4 @@ jobs:
           curl -sS -H "Content-Type: application/json" \
             -X POST \
             -d "$PAYLOAD" \
-            "${{ secrets.DISCORD_WEBHOOK }}"
+            "$DISCORD_WEBHOOK"
