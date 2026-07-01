@@ -10,8 +10,12 @@ jobs:
 
     steps:
       - name: Send release to Discord
+        shell: bash
         run: |
-          BODY=$(jq -r '.release.body' <<< '${{ toJson(github.event) }}')
+          set -e
+
+          BODY='${{ toJson(github.event.release.body) }}'
+          BODY=$(echo "$BODY" | jq -r '.')
 
           CHANGES=$(echo "$BODY" | awk '
             /<!-- DISCORD_START -->/{flag=1; next}
@@ -23,36 +27,41 @@ jobs:
             CHANGES="No changelog provided."
           fi
 
+          # защита от Discord лимитов
+          CHANGES=$(echo "$CHANGES" | head -c 3500)
+
+          CONTENT=$(jq -Rs . <<< "$CHANGES")
+
           PAYLOAD=$(jq -n \
             --arg title "${{ github.event.release.name }}" \
             --arg version "${{ github.event.release.tag_name }}" \
             --arg url "${{ github.event.release.html_url }}" \
-            --arg content "$CHANGES" \
+            --argjson content "$CONTENT" \
             '{
               content: "<@&1519341297188470874>",
               allowed_mentions: {
+                parse: [],
                 roles: ["1519341297188470874"]
               },
-
               embeds: [
                 {
-                  title: ("🚀 \($title)"),
+                  title: ("🚀 " + $title),
                   url: $url,
                   color: 5793266,
 
                   thumbnail: {
-                    url: "https://cdn.discordapp.com/attachments/1452039397435244677/1458169510447153255/ChatGPT_Image_20_._2025_._17_38_56_1.png?ex=6a3e1fee&is=6a3cce6e&hm=defdd5d62ba2d6050a22f137211a6024374a15da995d9ab0dbb69271bdb990bb"
+                    url: "https://cdn.discordapp.com/attachments/1452039397435244677/1458169510447153255/ChatGPT_Image_20_._2025_._17_38_56_1.png"
                   },
 
                   fields: [
                     {
                       name: "📦 Version",
-                      value: ("`\($version)`"),
+                      value: ("`" + $version + "`"),
                       inline: true
                     },
                     {
                       name: "🔗 Release",
-                      value: ("[Open on GitHub](\($url))"),
+                      value: ("[Open on GitHub](" + $url + ")"),
                       inline: true
                     }
                   ],
@@ -67,6 +76,6 @@ jobs:
             }')
 
           curl -H "Content-Type: application/json" \
-          -X POST \
-          -d "$PAYLOAD" \
-          ${{ secrets.DISCORD_WEBHOOK }}
+            -X POST \
+            -d "$PAYLOAD" \
+            "${{ secrets.DISCORD_WEBHOOK }}"
