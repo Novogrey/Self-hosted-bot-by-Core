@@ -53,7 +53,61 @@ const MESSAGE_TAGS = [
   '{{violations}}',
   '{{deleted}}',
   '{{preview}}',
-  '{{timestamp}}'
+  '{{timestamp}}',
+  '{{method}}',
+  '{{original}}',
+  '{{punishment}}'
+];
+const TEMPLATE_TAG_DETAILS = [
+  ['{{username}}', 'Имя пользователя Discord без упоминания.'],
+  ['{{displayname}}', 'Отображаемое имя участника на сервере или глобальное имя пользователя.'],
+  ['{{globalname}}', 'Глобальное имя Discord, если оно доступно.'],
+  ['{{userid}}', 'Discord ID пользователя.'],
+  ['{{mention}}', 'Упоминание пользователя в формате <@user_id>.'],
+  ['{{tag}}', 'Discord tag или имя пользователя.'],
+  ['{{avatar}}', 'Ссылка на аватар пользователя.'],
+  ['{{server}}', 'Название сервера.'],
+  ['{{serverid}}', 'Discord ID сервера.'],
+  ['{{membercount}}', 'Количество участников сервера, если Discord отдал это значение.'],
+  ['{{joindate}}', 'Дата вступления участника на сервер в формате Discord timestamp.'],
+  ['{{joinedrelative}}', 'Относительное время вступления на сервер, например “5 дней назад”.'],
+  ['{{createdat}}', 'Дата создания аккаунта в формате Discord timestamp.'],
+  ['{{createdrelative}}', 'Относительное время с момента создания аккаунта.'],
+  ['{{guildicon}}', 'Ссылка на иконку сервера.'],
+  ['{{guildbanner}}', 'Ссылка на баннер сервера.'],
+  ['{{moderator}}', 'Имя модератора, выполнившего действие.'],
+  ['{{moderatorid}}', 'Discord ID модератора.'],
+  ['{{moderatormention}}', 'Упоминание модератора.'],
+  ['{{reason}}', 'Причина модерационного действия или срабатывания автомодерации.'],
+  ['{{duration}}', 'Длительность наказания.'],
+  ['{{expires}}', 'Дата или время окончания наказания.'],
+  ['{{warnid}}', 'ID одного предупреждения.'],
+  ['{{count}}', 'Количество предупреждений или обработанных элементов, если команда передаёт это значение.'],
+  ['{{action}}', 'Название действия, выбранного командой или правилом наказаний.'],
+  ['{{results}}', 'Готовый текст результата команды.'],
+  ['{{subcommand}}', 'Использованный подкомандный режим.'],
+  ['{{target}}', 'Основной пользователь или объект действия.'],
+  ['{{targetid}}', 'Discord ID основного пользователя или объекта действия.'],
+  ['{{targets}}', 'Список пользователей или объектов действия.'],
+  ['{{text}}', 'Текст, переданный в команду.'],
+  ['{{amount}}', 'Числовое значение из команды, например количество сообщений.'],
+  ['{{time}}', 'Время или интервал, переданный в команду.'],
+  ['{{user_ids}}', 'Список пользовательских ID из команды.'],
+  ['{{userids_or_mentions}}', 'Список ID или упоминаний пользователей из команды.'],
+  ['{{warnids}}', 'Список ID предупреждений.'],
+  ['{{level}}', 'Уровень из команд системы уровней.'],
+  ['{{experience}}', 'Количество XP из команд системы уровней.'],
+  ['{{command}}', 'Название slash-команды без слеша.'],
+  ['{{channel}}', 'Упоминание канала, где выполнялась команда или произошло событие.'],
+  ['{{channelid}}', 'Discord ID канала.'],
+  ['{{violations}}', 'Список нарушений, найденных автомодерацией.'],
+  ['{{deleted}}', 'Статус удаления сообщения после срабатывания автомодерации.'],
+  ['{{preview}}', 'Короткий фрагмент исходного сообщения.'],
+  ['{{timestamp}}', 'Текущее время в формате Discord timestamp.'],
+  ['{{method}}', 'Метод ответа interaction: reply, editReply, followUp и похожие варианты.'],
+  ['{{original}}', 'Текст стандартного сообщения, которое заменяет кастомный шаблон.'],
+  ['{{punishment}}', 'Наказание, применённое автомодерацией или правилами варнов.'],
+  ['{{option.<name>}}', 'Значение slash-опции по её имени. Например {{option.reason}} или {{option.user}}.']
 ];
 
 const uiCopy = {
@@ -369,6 +423,7 @@ const translations = {
     appTitle: 'Self-hosted bot by Core',
     settings: 'Настройки',
     commands: 'Команды',
+    guides: 'Гайды',
     logs: 'Логи',
     save: 'Сохранить',
     start: 'Старт',
@@ -430,6 +485,7 @@ const translations = {
     appTitle: 'Self-hosted bot by Core',
     settings: 'Settings',
     commands: 'Commands',
+    guides: 'Guides',
     logs: 'Logs',
     save: 'Save',
     start: 'Start',
@@ -491,6 +547,7 @@ const translations = {
     appTitle: 'Self-hosted bot by Core',
     settings: 'Einstellungen',
     commands: 'Befehle',
+    guides: 'Anleitungen',
     logs: 'Logs',
     save: 'Speichern',
     start: 'Start',
@@ -552,6 +609,7 @@ const translations = {
     appTitle: 'Self-hosted bot by Core',
     settings: 'Налаштування',
     commands: 'Команди',
+    guides: 'Гайди',
     logs: 'Логи',
     save: 'Зберегти',
     start: 'Старт',
@@ -655,11 +713,11 @@ const settingsLayout = [
     accent: '#ef6572',
     items: [
       { key: 'MUTE_ROLE', labelKey: 'muteRole' },
-      { key: 'ADMIN_ROLES_LEVEL_0', label: 'Admin role 0' },
-      { key: 'ADMIN_ROLES_LEVEL_1', label: 'Admin role 1' },
-      { key: 'ADMIN_ROLES_LEVEL_2', label: 'Admin role 2' },
-      { key: 'ADMIN_ROLES_LEVEL_3', label: 'Admin role 3' },
-      { key: 'ADMIN_ROLES_LEVEL_4', label: 'Admin role 4' },
+      { key: 'ADMIN_ROLES_LEVEL_0', labelMap: { ru: 'Уровень доступа 0', en: 'Access level 0', de: 'Zugriffsstufe 0', ua: 'Рівень доступу 0' } },
+      { key: 'ADMIN_ROLES_LEVEL_1', labelMap: { ru: 'Уровень доступа 1', en: 'Access level 1', de: 'Zugriffsstufe 1', ua: 'Рівень доступу 1' } },
+      { key: 'ADMIN_ROLES_LEVEL_2', labelMap: { ru: 'Уровень доступа 2', en: 'Access level 2', de: 'Zugriffsstufe 2', ua: 'Рівень доступу 2' } },
+      { key: 'ADMIN_ROLES_LEVEL_3', labelMap: { ru: 'Уровень доступа 3', en: 'Access level 3', de: 'Zugriffsstufe 3', ua: 'Рівень доступу 3' } },
+      { key: 'ADMIN_ROLES_LEVEL_4', labelMap: { ru: 'Уровень доступа 4', en: 'Access level 4', de: 'Zugriffsstufe 4', ua: 'Рівень доступу 4' } },
       { key: 'WARN_PUNISHMENTS', labelKey: 'warns', type: 'warnRules' },
       { key: 'MODERATION_SWEEP_INTERVAL_MS', labelKey: 'sweep', type: 'number', attrs: 'min="30000" step="1000"' }
     ]
@@ -780,13 +838,232 @@ const settingHelp = {
   AUTOMOD_SPAM_TIME_WINDOW_MS: 'Окно времени антиспама в миллисекундах. Например 60000 означает 60 секунд.',
   LEVELS_ENABLED: 'Включает систему уровней и XP. Если выключить, команды уровней останутся видны в UI, но runtime не будет начислять прогресс.',
   VOICE_TRACKING_ENABLED: 'Включает учёт времени в голосовых каналах для лидербордов и статистики.',
-  SQL_BACKUP_ENABLED: 'Включает резервное копирование SQLite. Для работы укажи канал SQL backup и дай боту право отправлять файлы.',
-  SQL_BACKUP_DEBOUNCE_MS: 'Минимальная пауза между backup-событиями после изменений базы. Увеличь значение, если сервер часто пишет в SQLite.',
+  SQL_BACKUP_ENABLED: 'Включает резервное копирование SQLite. Для работы нужен канал SQL backup и право бота отправлять файлы.',
+  SQL_BACKUP_DEBOUNCE_MS: 'Минимальная пауза между backup-событиями после изменений базы. Значение стоит увеличить, если сервер часто пишет в SQLite.',
   DISABLED_COMMANDS: 'Список команд через запятую, которые нужно скрыть или отключить. То же самое можно переключать во вкладке команд.',
   DISABLED_COMMAND_CATEGORIES: 'Список категорий через запятую. Категория global принудительно отключена, потому что публичные команды удалены.',
   SCAM_AD_CHANNEL_ID: 'ID специального канала-ловушки для scam-рекламы. Любое сообщение пользователя в этом канале приводит к перманентному бану с удалением сообщений за 7 дней. Обычная автомодерация этот канал пропускает.',
   SCAM_TRAP_SETUP_ACTION: 'Кнопка выполняет первичную настройку указанного scam trap канала через Discord API: сохраняет текущие настройки, оставляет один overwrite для @everyone с правами View Channel, Send Messages и Read Message History, отправляет редактируемое предупреждение из Message editor и пытается переместить канал наверх.'
 };
+
+const guideSections = [
+  {
+    eyebrow: 'Start',
+    title: 'Порядок первичной настройки',
+    summary: 'Рекомендуемый порядок действий для запуска self-hosted бота без пропуска обязательных Discord-настроек.',
+    steps: [
+      'Создать приложение в Discord Developer Portal и открыть раздел Bot.',
+      'Скопировать bot token и вставить его только в поле DISCORD_TOKEN. Токен нельзя публиковать, отправлять в чат или показывать на скриншотах.',
+      'Скопировать Application ID из General Information и вставить его в CLIENT_ID.',
+      'Включить Developer Mode в Discord, скопировать ID сервера и вставить его в GUILD_ID.',
+      'В разделе Bot включить Privileged Gateway Intents: Server Members Intent и Message Content Intent. Presence Intent включается только если серверу реально нужны presence-события.',
+      'Добавить бота на сервер по ссылке приглашения с правом Administrator или выдать вручную права для модерации, сообщений, каналов и ролей.',
+      'Заполнить каналы логов, роли доступа, mute role, приветствия, автомодерацию и scam-trap канал.',
+      'Нажать Save, затем Start. После успешного запуска в логах появится статус процесса и ссылка приглашения.'
+    ]
+  },
+  {
+    eyebrow: 'Discord IDs',
+    title: 'Как получить ID сервера, канала, роли и пользователя',
+    summary: 'Все поля с ID принимают только числовой Discord ID без скобок, ссылок и лишнего текста.',
+    steps: [
+      'Открыть Discord -> User Settings -> Advanced -> включить Developer Mode.',
+      'ID сервера: нажать правой кнопкой по иконке сервера -> Copy Server ID.',
+      'ID канала: нажать правой кнопкой по нужному текстовому каналу -> Copy Channel ID.',
+      'ID роли: открыть Server Settings -> Roles -> нажать правой кнопкой по роли -> Copy Role ID.',
+      'ID пользователя: нажать правой кнопкой по пользователю -> Copy User ID.',
+      'Если поле принимает несколько ID, вводить их через запятую: 123456789012345678,987654321098765432.'
+    ]
+  },
+  {
+    eyebrow: 'Developer Portal',
+    title: 'Токен бота, ID бота и Intents',
+    summary: 'Эти значения берутся только из Discord Developer Portal и нужны для авторизации, команд и событий.',
+    settings: [
+      ['DISCORD_TOKEN', 'Раздел Bot -> Reset Token или Copy Token. Вставляется в единственное поле токена. Это секретный ключ бота.'],
+      ['CLIENT_ID', 'Раздел General Information -> Application ID. Используется для регистрации slash-команд и ссылки приглашения.'],
+      ['GUILD_ID', 'ID сервера, где бот должен работать. Берётся через Developer Mode в Discord.'],
+      ['DEV', 'ID владельца или технического администратора. Эти пользователи получают доступ к служебным командам управления ботом.'],
+      ['Server Members Intent', 'Включить в Bot -> Privileged Gateway Intents. Нужен для welcome-событий, ролей, участников и части модерации.'],
+      ['Message Content Intent', 'Включить в Bot -> Privileged Gateway Intents. Нужен автомодерации для проверки текста, ссылок, плохих слов и спама.'],
+      ['Presence Intent', 'Не обязателен для базовой работы. Включать только если сервер использует функциональность, зависящую от presence-событий.']
+    ]
+  },
+  {
+    eyebrow: 'Main',
+    title: 'Основные настройки приложения',
+    summary: 'Эти параметры отвечают за подключение бота, целевой сервер и локальную базу.',
+    settings: [
+      ['DISCORD_TOKEN', 'Токен бота из Developer Portal. Без него Start не сможет запустить Discord-клиент.'],
+      ['CLIENT_ID', 'Application ID бота. Нужен для slash-команд и формирования ссылки приглашения.'],
+      ['GUILD_ID', 'ID основного сервера. Команды и большинство функций рассчитаны на этот сервер.'],
+      ['DEV', 'ID владельцев/разработчиков через запятую. Используется для служебных команд вроде перезагрузки и обновления команд.'],
+      ['SQLITE_DB_PATH', 'Путь к SQLite базе. По умолчанию подходит стандартное значение. Менять стоит только если нужно хранить базу в другом месте.']
+    ]
+  },
+  {
+    eyebrow: 'Presence',
+    title: 'Статус и активность бота',
+    summary: 'Эти настройки меняют то, как бот отображается в списке участников Discord.',
+    settings: [
+      ['BOT_STATUS', 'Статус присутствия: online, idle, dnd или invisible. Выбирается через меню.'],
+      ['BOT_ACTIVITY_TYPE', 'Тип активности: Watching, Playing, Listening, Competing или Streaming.'],
+      ['BOT_ACTIVITY_TEXT', 'Текст активности. Например: /help, moderation, server security. Если оставить пустым, используется стандартный текст.']
+    ]
+  },
+  {
+    eyebrow: 'Channels',
+    title: 'Каналы логов, уведомлений и резервных копий',
+    summary: 'Для каждого поля нужен ID текстового канала. Боту нужны права View Channel, Send Messages, Read Message History и Attach Files для backup.',
+    settings: [
+      ['ADMIN_LOG_CHANNEL_ID', 'Канал важных административных событий и модерационных логов. Рекомендуется закрытый канал для персонала.'],
+      ['LOG_CHANNEL_ID', 'Основной канал логов. Можно использовать отдельно от admin logs, если сервер разделяет технические и модерационные события.'],
+      ['NOTIFICATION', 'Канал служебных уведомлений, предпросмотров и автоматических системных сообщений.'],
+      ['SQL_BACKUP_CHANNEL_ID', 'Канал, куда бот отправляет резервные копии SQLite. Должен быть приватным.'],
+      ['AUTOMOD_LOG_CHANNEL_ID', 'Канал логов автомодерации. Если пустой, бот использует ADMIN_LOG_CHANNEL_ID.'],
+      ['WELCOME_SERVER_CHANNEL_ID', 'Канал публичного приветствия новых участников. Используется только если server welcome включён.'],
+      ['SCAM_AD_CHANNEL_ID', 'Специальный scam-trap канал. Любое сообщение пользователя в этом канале приводит к перманентному бану.']
+    ]
+  },
+  {
+    eyebrow: 'Access',
+    title: 'AdminRole уровни доступа',
+    summary: 'AdminRole не выдаёт Discord Administrator. Это список ролей, которым бот разрешает команды определённого уровня.',
+    settings: [
+      ['ADMIN_ROLES_LEVEL_0', 'Служебный уровень владельца: управление ботом, обновление команд и технические действия.'],
+      ['ADMIN_ROLES_LEVEL_1', 'Сильная модерация: постоянные строгие действия, включая наиболее опасные команды.'],
+      ['ADMIN_ROLES_LEVEL_2', 'Средняя модерация: remwarn и временные ban-действия.'],
+      ['ADMIN_ROLES_LEVEL_3', 'Обычная модерация: mute, unmute и slowmode.'],
+      ['ADMIN_ROLES_LEVEL_4', 'Базовая модерация: warn, warns и clear.'],
+      ['Формат', 'В каждое поле вводятся Role ID через запятую: RoleID,RoleID. Роль должна существовать на целевом сервере.']
+    ]
+  },
+  {
+    eyebrow: 'Moderation',
+    title: 'Модерация, mute role и правила варнов',
+    summary: 'Эти настройки влияют на ручные команды модерации и автоматические наказания за накопленные предупреждения.',
+    settings: [
+      ['MUTE_ROLE', 'ID роли мута. Бот выдаёт её при mute и снимает при unmute или истечении наказания. Роль должна быть ниже роли бота.'],
+      ['WARN_PUNISHMENTS', 'Правила наказаний за количество варнов. В интерфейсе добавляются через модальное окно: количество варнов, действие и срок.'],
+      ['MODERATION_SWEEP_INTERVAL_MS', 'Как часто бот проверяет истёкшие муты/баны. 60000 означает один раз в минуту. Слишком маленькое значение повышает нагрузку.']
+    ]
+  },
+  {
+    eyebrow: 'Automod',
+    title: 'Автомодерация',
+    summary: 'Автомодерация проверяет сообщения на массовые пинги, плохие слова, ссылки, Discord-инвайты и спам.',
+    settings: [
+      ['AUTOMOD_ENABLED', 'Главный переключатель автомодерации. Если выключен, остальные automod-проверки не выполняются.'],
+      ['AUTOMOD_DELETE_MESSAGE', 'Удаляет нарушающее сообщение. Требуется право Manage Messages.'],
+      ['AUTOMOD_WARN_USER', 'Записывает нарушение как варн и может запускать правила WARN_PUNISHMENTS.'],
+      ['AUTOMOD_IGNORE_ADMINISTRATORS', 'Пропускает участников с Discord Administrator. Владелец сервера также пропускается.'],
+      ['AUTOMOD_BYPASS_ROLE_IDS', 'Роли-исключения через запятую. Участники с этими ролями не проверяются автомодерацией.'],
+      ['AUTOMOD_PING_ENABLED', 'Включает защиту от массовых упоминаний.'],
+      ['AUTOMOD_PING_MAX_MENTIONS', 'Максимальное число упоминаний в одном сообщении до срабатывания.'],
+      ['AUTOMOD_BAD_WORDS_ENABLED', 'Включает фильтр запрещённых слов.'],
+      ['AUTOMOD_BAD_WORDS', 'Слова через запятую, точку с запятой или новую строку. Регистр не важен.'],
+      ['AUTOMOD_LINKS_ENABLED', 'Включает проверку ссылок.'],
+      ['AUTOMOD_LINKS_BLOCK_INVITES', 'Блокирует discord.gg и discord.com/invite ссылки.'],
+      ['AUTOMOD_LINKS_BLOCK_ALL', 'Блокирует все ссылки, кроме разрешённых доменов.'],
+      ['AUTOMOD_LINKS_ALLOWED_DOMAINS', 'Разрешённые домены без https. Например: example.com, docs.example.com.'],
+      ['AUTOMOD_SPAM_ENABLED', 'Включает антиспам по частоте и повторяющемуся тексту.'],
+      ['AUTOMOD_SPAM_MESSAGE_LIMIT', 'Сколько сообщений можно отправить в заданное окно времени.'],
+      ['AUTOMOD_SPAM_TIME_WINDOW_MS', 'Окно времени в миллисекундах. 60000 означает 60 секунд.']
+    ]
+  },
+  {
+    eyebrow: 'Scam trap',
+    title: 'Защитный scam-trap канал',
+    summary: 'Scam-trap канал нужен для автоматического выявления взломанных аккаунтов и ботов, отправляющих мошенническую рекламу.',
+    steps: [
+      'Создать отдельный текстовый канал на сервере.',
+      'Скопировать Channel ID и вставить его в SCAM_AD_CHANNEL_ID.',
+      'Открыть карточку Automoderation и нажать кнопку первичной настройки канала.',
+      'Приложение сохранит настройки, откроет канал для @everyone, очистит остальные channel overwrites, отправит предупреждение и попробует поднять канал наверх.',
+      'После запуска бота любое пользовательское сообщение в этом канале приведёт к permanent ban и удалению сообщений пользователя за последние 7 дней.',
+      'Обычная автомодерация этот канал пропускает, чтобы не создавать двойные наказания.'
+    ]
+  },
+  {
+    eyebrow: 'Messages',
+    title: 'Редактор сообщений',
+    summary: 'Редактор позволяет менять реальные сообщения бота без ручного редактирования JSON.',
+    settings: [
+      ['CUSTOM_MESSAGES_JSON', 'Внутреннее хранилище всех шаблонов редактора. Обычно поле не редактируется вручную: изменения делаются через визуальный редактор.'],
+      ['Шаблоны приветствий', 'Отдельно настраиваются ЛС-приветствие и приветствие на сервере.'],
+      ['Шаблоны модерации', 'Можно редактировать ответы команд и личные уведомления о ban, kick, mute, warn и наказаниях по варнам.'],
+      ['Components V2', 'Поддерживаются Container, Section, Text Display, Thumbnail, Media Gallery, File, Separator и link buttons. Functional custom_id buttons не редактируются, чтобы не ломать команды.'],
+      ['Теги', 'Все доступные теги перечислены в разделе “Теги шаблонов сообщений”. Их можно использовать в content, embeds и текстовых Components V2.'],
+      ['Сброс', 'Кнопка reset возвращает выбранный шаблон к стандартному виду.']
+    ]
+  },
+  {
+    eyebrow: 'Welcomes',
+    title: 'Приветствия',
+    summary: 'Приветствия делятся на личное сообщение и публичное сообщение на сервере.',
+    settings: [
+      ['WELCOME_DM_ENABLED', 'Включает личное приветствие новому участнику. Если выключено, ЛС не отправляется.'],
+      ['WELCOME_SERVER_ENABLED', 'Включает приветствие в канале сервера.'],
+      ['WELCOME_SERVER_CHANNEL_ID', 'ID канала, куда отправляется публичное приветствие.'],
+      ['Теги приветствий', `Приветствия используют пользовательские и серверные теги из общего справочника: ${WELCOME_TAGS.join(', ')}.`]
+    ]
+  },
+  {
+    eyebrow: 'Tags',
+    title: 'Теги шаблонов сообщений',
+    summary: 'Теги подставляются перед отправкой сообщения. Их можно использовать в тексте, embeds, Components V2 и ссылках на изображения. Если конкретный сценарий не передаёт значение тега, тег останется без замены или будет пустым.',
+    settings: TEMPLATE_TAG_DETAILS
+  },
+  {
+    eyebrow: 'Commands',
+    title: 'Команды и отключение функций',
+    summary: 'Во вкладке команд можно включать и выключать доступные команды без ручного изменения конфигурации.',
+    settings: [
+      ['DISABLED_COMMANDS', 'Список конкретных команд через запятую. Переключатели во вкладке Commands обновляют это поле автоматически.'],
+      ['DISABLED_COMMAND_CATEGORIES', 'Список категорий команд через запятую. Категория global заблокирована по умолчанию, потому что публичные команды удалены.'],
+      ['Commands tab', 'Поиск, фильтр категорий и кнопки Enabled/Disabled позволяют быстро управлять видимостью и регистрацией команд.']
+    ]
+  },
+  {
+    eyebrow: 'Data',
+    title: 'Уровни, voice tracking и SQL backup',
+    summary: 'Эти функции используют SQLite и не требуют MongoDB.',
+    settings: [
+      ['LEVELS_ENABLED', 'Включает начисление XP и систему уровней.'],
+      ['VOICE_TRACKING_ENABLED', 'Включает учёт активности в голосовых каналах.'],
+      ['LEVEL_ROLE_MAP', 'Карта ролей за уровни, если сервер использует автоматическую выдачу ролей за прогресс.'],
+      ['SQL_BACKUP_ENABLED', 'Включает отправку резервных копий SQLite в указанный канал.'],
+      ['SQL_BACKUP_DEBOUNCE_MS', 'Минимальная пауза между backup-событиями после изменений базы.']
+    ]
+  },
+  {
+    eyebrow: 'Runtime',
+    title: 'Запуск, остановка, логи и экспорт',
+    summary: 'Кнопки управления работают с локальным процессом бота и сохраняют настройки перед запуском.',
+    settings: [
+      ['Save', 'Сохраняет текущие настройки. После успешного сохранения кнопка показывает “Сохранено!”.'],
+      ['Start', 'Сохраняет настройки и запускает бота. Логи запуска отображаются во вкладке Logs.'],
+      ['Restart', 'Останавливает текущий процесс и запускает его снова.'],
+      ['Stop', 'Корректно завершает процесс бота.'],
+      ['Emergency stop', 'Принудительно завершает процесс, если обычная остановка не помогает.'],
+      ['Logs', 'Показывает системные сообщения приложения, stdout и stderr процесса бота.'],
+      ['Hosting export', 'Создаёт ZIP для хостинга с текущими настройками. Архив может содержать токен, поэтому его нельзя публиковать.'],
+      ['Updater', 'Updater используется для установленной версии приложения. Portable-сборку обновляют заменой portable-папки.']
+    ]
+  },
+  {
+    eyebrow: 'Security',
+    title: 'Безопасность перед публикацией',
+    summary: 'Перед передачей файлов другим пользователям необходимо проверить, что секреты не попали в публичные материалы.',
+    steps: [
+      'Нельзя публиковать Discord token, .env, hosting ZIP и скриншоты с токеном.',
+      'Если токен был показан посторонним, его нужно сразу reset в Discord Developer Portal.',
+      'Hosting ZIP предназначен для загрузки на хостинг и может содержать действующий токен.',
+      'Каналы логов и backup должны быть закрыты от обычных участников.',
+      'Роль бота должна быть выше ролей, которыми он управляет, иначе mute/unmute и часть модерации не сработают.'
+    ]
+  }
+];
 
 const state = {
   tab: localStorage.getItem(ONBOARDING_STORAGE_KEY) === 'true' ? 'settings' : 'setup',
@@ -872,6 +1149,20 @@ function settingLabel(item) {
   return item.label || t(item.labelKey);
 }
 
+function guideSettingName(name) {
+  const item = settingsLayout.flatMap((section) => section.items).find((entry) => entry.key === name);
+  return item ? settingLabel(item) : name;
+}
+
+function formatGuideText(value) {
+  const knownKeys = settingsLayout
+    .flatMap((section) => section.items)
+    .map((item) => item.key)
+    .sort((left, right) => right.length - left.length);
+  const pattern = new RegExp(`\\b(${knownKeys.map((key) => key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})\\b`, 'g');
+  return String(value ?? '').replace(pattern, (key) => `«${guideSettingName(key)}»`);
+}
+
 function adminRoleHelp(level) {
   const levels = {
     0: 'Уровень 0: служебные команды владельца и разработчика, например /refreshcommands, /reload, /shutdown, /say, set/reset level и команды обслуживания автомодерации.',
@@ -904,6 +1195,7 @@ function renderShell() {
     ['setup', ui('setup')],
     ['settings', t('settings')],
     ['commands', t('commands')],
+    ['guides', t('guides')],
     ['logs', t('logs')]
   ].map(([id, label]) => `
     <button class="nav-button" type="button" data-tab="${id}">
@@ -1789,7 +2081,7 @@ function renderSetupFields(fields = []) {
   return `
     <div class="setup-fields">
       ${fields.map((field) => {
-        const label = field.label || field.key;
+        const label = field.label && field.label !== field.key ? field.label : guideSettingName(field.key);
         const id = `setup-${field.key}`;
         return `
           <div class="field">
@@ -1809,48 +2101,48 @@ function setupSteps() {
   return [
     {
       image: 'step-01-applications.png',
-      title: { ru: 'Создай приложение Discord', en: 'Create a Discord app', de: 'Discord-App erstellen', ua: 'Створи Discord-застосунок' },
+      title: { ru: 'Создание Discord-приложения', en: 'Create a Discord app', de: 'Discord-App erstellen', ua: 'Створи Discord-застосунок' },
       bullets: {
-        ru: ['Открой Discord Developer Portal и вкладку Applications.', 'Нажми New Application в правом верхнем углу.', 'Это будет отдельный self-host бот для твоего сервера.'],
+        ru: ['Открыть Discord Developer Portal и вкладку Applications.', 'Выбрать New Application в правом верхнем углу.', 'Это отдельный self-host бот для выбранного сервера.'],
         en: ['Open Discord Developer Portal and Applications.', 'Click New Application in the top-right corner.', 'This creates a separate self-host bot for your server.']
       }
     },
     {
       image: 'step-02-create-app.png',
-      title: { ru: 'Заполни имя и создай app', en: 'Name and create the app', de: 'App benennen', ua: 'Назви і створи app' },
+      title: { ru: 'Имя и создание приложения', en: 'Name and create the app', de: 'App benennen', ua: 'Назви і створи app' },
       bullets: {
-        ru: ['Впиши имя бота.', 'Поставь галочку условий Discord.', 'Нажми Create.'],
+        ru: ['Ввести имя бота.', 'Отметить принятие условий Discord.', 'Выбрать Create.'],
         en: ['Enter the bot name.', 'Accept Discord terms.', 'Click Create.']
       }
     },
     {
       image: 'step-03-application-id.png',
-      title: { ru: 'Скопируй ID бота', en: 'Copy bot ID', de: 'Bot-ID kopieren', ua: 'Скопіюй ID бота' },
+      title: { ru: 'ID бота', en: 'Copy bot ID', de: 'Bot-ID kopieren', ua: 'Скопіюй ID бота' },
       fields: [{ key: 'CLIENT_ID', label: 'CLIENT_ID' }],
       bullets: {
-        ru: ['В General Information скопируй Application ID.', 'Вставь его в поле ID бота / CLIENT_ID.', 'Этот ID нужен для регистрации slash-команд и ссылки приглашения.'],
+        ru: ['В General Information скопировать Application ID.', 'Вставить его в поле ID бота / CLIENT_ID.', 'Этот ID нужен для регистрации slash-команд и ссылки приглашения.'],
         en: ['Copy Application ID in General Information.', 'Paste it into Bot ID / CLIENT_ID.', 'It is used for slash commands and invite URL.']
       }
     },
     {
       image: 'step-04-token.png',
-      title: { ru: 'Получай токен только здесь', en: 'Get the token here', de: 'Token hier holen', ua: 'Отримай токен тут' },
+      title: { ru: 'Токен бота', en: 'Get the token here', de: 'Token hier holen', ua: 'Отримай токен тут' },
       fields: [{ key: 'DISCORD_TOKEN', label: 'DISCORD_TOKEN', type: 'password' }],
       bullets: {
-        ru: ['Открой вкладку Bot.', 'Нажми Reset Token и скопируй токен один раз.', 'В Core вставляй его только в одно поле: Токен бота / DISCORD_TOKEN. Никому не отправляй токен.'],
+        ru: ['Открыть вкладку Bot.', 'Выбрать Reset Token и скопировать токен один раз.', 'В Core токен вводится только в одно поле: Токен бота / DISCORD_TOKEN. Токен нельзя отправлять другим людям или публиковать.'],
         en: ['Open the Bot tab.', 'Click Reset Token and copy it once.', 'Paste it only into Bot token / DISCORD_TOKEN. Never share the token.']
       }
     },
     {
       image: 'step-05-intents.png',
-      title: { ru: 'Включи нужные Intents', en: 'Enable required intents', de: 'Intents aktivieren', ua: 'Увімкни потрібні Intents' },
+      title: { ru: 'Необходимые Intents', en: 'Enable required intents', de: 'Intents aktivieren', ua: 'Увімкни потрібні Intents' },
       bullets: {
-        ru: ['В Bot включи Presence Intent, Server Members Intent и Message Content Intent.', 'Без Server Members не будет нормального приветствия новых участников.', 'Без Message Content часть модерации и автомодерации не сможет читать сообщения.'],
+        ru: ['В разделе Bot включаются Presence Intent, Server Members Intent и Message Content Intent.', 'Server Members нужен для приветствий новых участников.', 'Message Content нужен функциям модерации, которые читают сообщения.'],
         en: ['Enable Presence Intent, Server Members Intent, and Message Content Intent.', 'Server Members is needed for welcome events.', 'Message Content is needed for moderation features that read messages.']
       }
     },
     {
-      title: { ru: 'Включи режим разработчика Discord', en: 'Enable Discord Developer Mode', de: 'Entwicklermodus aktivieren', ua: 'Увімкни режим розробника Discord' },
+      title: { ru: 'Режим разработчика Discord', en: 'Enable Discord Developer Mode', de: 'Entwicklermodus aktivieren', ua: 'Увімкни режим розробника Discord' },
       fields: [
         { key: 'GUILD_ID', label: 'GUILD_ID' },
         { key: 'ADMIN_LOG_CHANNEL_ID', label: 'ADMIN_LOG_CHANNEL_ID' },
@@ -1859,7 +2151,7 @@ function setupSteps() {
         { key: 'SQL_BACKUP_CHANNEL_ID', label: 'SQL_BACKUP_CHANNEL_ID' }
       ],
       bullets: {
-        ru: ['Discord -> User Settings -> Advanced -> Developer Mode.', 'После этого можно копировать ID: правый клик по серверу, каналу, роли или пользователю -> Copy ID.', 'ID сервера вставь в GUILD_ID, ID каналов логов - в соответствующие поля каналов.'],
+        ru: ['Discord -> User Settings -> Advanced -> Developer Mode.', 'После этого ID копируются через правый клик по серверу, каналу, роли или пользователю -> Copy ID.', 'ID сервера вводится в GUILD_ID, ID каналов логов - в соответствующие поля каналов.'],
         en: ['Discord -> User Settings -> Advanced -> Developer Mode.', 'Then right-click a server, channel, role, or user and choose Copy ID.', 'Paste server ID into GUILD_ID and log channel IDs into channel fields.']
       }
     },
@@ -1873,14 +2165,14 @@ function setupSteps() {
         { key: 'ADMIN_ROLES_LEVEL_4', label: 'ADMIN_ROLES_LEVEL_4' }
       ],
       bullets: {
-        ru: ['AdminRole не выдаёт Discord-админку. Это список ролей, которым бот разрешает команды конкретного уровня.', 'Вводи ID ролей через запятую: AdminRoleID,AdminRoleID.', 'Уровень 0 - служебные команды владельца. 1 - сильная модерация. 2 - remwarn/временный ban. 3 - mute/unmute/slowmode. 4 - warn/warns/clear.'],
+        ru: ['AdminRole не выдаёт Discord-админку. Это список ролей, которым бот разрешает команды конкретного уровня.', 'ID ролей вводятся через запятую: AdminRoleID,AdminRoleID.', 'Уровень 0 - служебные команды владельца. 1 - сильная модерация. 2 - remwarn/временный ban. 3 - mute/unmute/slowmode. 4 - warn/warns/clear.'],
         en: ['AdminRole does not grant Discord administrator. It is a role-ID allowlist for bot command levels.', 'Enter role IDs separated by commas: AdminRoleID,AdminRoleID.', 'Level 0 is owner/service tools. 1 is strong moderation. 2 is remwarn/temp ban. 3 is mute/unmute/slowmode. 4 is warn/warns/clear.']
       }
     },
     {
       title: { ru: 'Приветствия через JSON и теги', en: 'Welcome JSON and tags', de: 'Willkommen-JSON und Tags', ua: 'Привітання через JSON і теги' },
       bullets: {
-        ru: ['ЛС-приветствие и серверное приветствие теперь разные настройки.', 'Можно вставить обычный message JSON, embeds или Components V2. Для серверного приветствия обязательно укажи канал.', `Доступные теги: ${WELCOME_TAGS.join(', ')}.`],
+        ru: ['ЛС-приветствие и серверное приветствие являются отдельными настройками.', 'Поддерживаются обычный message JSON, embeds и Components V2. Для серверного приветствия обязательно нужен канал.', `Доступные теги: ${WELCOME_TAGS.join(', ')}.`],
         en: ['DM welcome and server welcome are separate settings.', 'You can paste normal message JSON, embeds, or Components V2. Server welcome also needs a channel ID.', `Available tags: ${WELCOME_TAGS.join(', ')}.`]
       }
     }
@@ -1950,16 +2242,25 @@ function renderField(item) {
   }
 
   if (item.type === 'checkbox') {
-    const checked = String(envValue(item.key)).toLowerCase() === 'true' ? 'checked' : '';
+    const checked = String(envValue(item.key)).toLowerCase() === 'true';
     return `
       <div class="toggle-row">
         <div class="field-heading">
           <span>${escapeHtml(label)}</span>
           ${helpButton(item.key, label)}
         </div>
-        <label class="switch" for="${id}">
-          <input id="${id}" data-env="${escapeHtml(item.key)}" type="checkbox" ${checked}>
-          <span></span>
+        <label class="switch ${checked ? 'is-on' : ''}" data-switch-control="${escapeHtml(item.key)}">
+          <input
+            id="${id}"
+            data-env="${escapeHtml(item.key)}"
+            data-switch-toggle="${escapeHtml(item.key)}"
+            type="checkbox"
+            role="switch"
+            aria-checked="${checked ? 'true' : 'false'}"
+            aria-label="${escapeHtml(label)}"
+            ${checked ? 'checked' : ''}
+          >
+          <span class="switch-track"></span>
         </label>
       </div>
     `;
@@ -2210,6 +2511,63 @@ function createLogLineNode(entry) {
   return row;
 }
 
+function renderGuideSteps(steps = []) {
+  return steps?.length ? `
+    <ol class="guide-steps">
+      ${steps.map((step) => `<li>${escapeHtml(formatGuideText(step))}</li>`).join('')}
+    </ol>
+  ` : '';
+}
+
+function renderGuideSettings(settings = []) {
+  return settings?.length ? `
+    <div class="guide-settings">
+      ${settings.map(([name, description]) => {
+        const label = guideSettingName(name);
+        const nameHtml = String(name).startsWith('{{')
+          ? `<code>${escapeHtml(label)}</code>`
+          : `<strong>${escapeHtml(label)}</strong>`;
+        return `
+          <div class="guide-setting-row">
+            ${nameHtml}
+            <p>${escapeHtml(formatGuideText(description))}</p>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  ` : '';
+}
+
+function renderGuideCard(section, index) {
+  return `
+    <article class="guide-card">
+      <div class="guide-card-number">${escapeHtml(String(index + 1).padStart(2, '0'))}</div>
+      <div class="guide-card-body">
+        <span class="eyebrow">${escapeHtml(section.eyebrow || 'Guide')}</span>
+        <h3>${escapeHtml(formatGuideText(section.title))}</h3>
+        <p>${escapeHtml(formatGuideText(section.summary || ''))}</p>
+        ${renderGuideSteps(section.steps)}
+        ${renderGuideSettings(section.settings)}
+      </div>
+    </article>
+  `;
+}
+
+function renderGuidesView() {
+  return `
+    <section class="guide-view">
+      <div class="guide-hero">
+        <span class="eyebrow">${escapeHtml(t('guides'))}</span>
+        <h2>Полный справочник по настройке</h2>
+        <p>Пошаговая настройка self-hosted бота: обязательные Discord-значения, права, каналы, автомодерация, шаблоны сообщений и теги.</p>
+      </div>
+      <div class="guide-grid">
+        ${guideSections.map(renderGuideCard).join('')}
+      </div>
+    </section>
+  `;
+}
+
 function renderView() {
   if (!state.shellReady) renderShell();
 
@@ -2218,6 +2576,7 @@ function renderView() {
 
   if (state.tab === 'setup') view.innerHTML = renderSetupView();
   else if (state.tab === 'commands') view.innerHTML = renderCommandsView();
+  else if (state.tab === 'guides') view.innerHTML = renderGuidesView();
   else if (state.tab === 'logs') view.innerHTML = renderLogsView();
   else view.innerHTML = renderSettingsView();
 
@@ -2261,7 +2620,7 @@ function openHelp(key) {
 
   if (!title || !body || !overlay) return;
   title.textContent = label;
-  body.textContent = helpFor(key);
+  body.textContent = formatGuideText(helpFor(key));
   overlay.hidden = false;
   requestAnimationFrame(() => overlay.classList.add('open'));
 }
@@ -2296,6 +2655,31 @@ function setFieldValue(key, value) {
   setEnvValue(key, value);
   const field = document.querySelector(`[data-env="${CSS.escape(key)}"]`);
   if (field) field.value = value;
+}
+
+function syncSwitchControl(input) {
+  if (!input || input.type !== 'checkbox' || !input.dataset.switchToggle) return;
+  input.setAttribute('aria-checked', input.checked ? 'true' : 'false');
+  input.closest('.switch')?.classList.toggle('is-on', input.checked);
+}
+
+function setSwitchChecked(input, checked) {
+  if (!input || input.type !== 'checkbox') return;
+  input.checked = checked;
+  setEnvValue(input.dataset.env, String(checked));
+  syncSwitchControl(input);
+}
+
+function toggleSwitchControl(input) {
+  if (!input || input.disabled) return;
+  const previous = input.checked;
+  const checked = !previous;
+  setSwitchChecked(input, checked);
+
+  saveConfig().catch((error) => {
+    setSwitchChecked(input, previous);
+    pushLocalLog(error.stack || error.message || String(error), 'stderr');
+  });
 }
 
 function openWarnRuleModal(index = null) {
@@ -3285,15 +3669,31 @@ function bindRenderedControls() {
     });
   });
 
+  document.querySelectorAll('[data-switch-control]').forEach((control) => {
+    bindOnce(control, 'click', 'SwitchControl', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      toggleSwitchControl(control.querySelector('[data-switch-toggle]'));
+    });
+    bindOnce(control, 'keydown', 'SwitchKey', (event) => {
+      if (![' ', 'Enter'].includes(event.key)) return;
+      event.preventDefault();
+      event.stopPropagation();
+      toggleSwitchControl(control.querySelector('[data-switch-toggle]'));
+    });
+  });
+
   document.querySelectorAll('[data-env]').forEach((input) => {
     bindOnce(input, 'input', 'EnvInput', (event) => {
       event.stopPropagation();
       setEnvValue(input.dataset.env, input.type === 'checkbox' ? String(input.checked) : input.value);
+      syncSwitchControl(input);
     });
 
     bindOnce(input, 'change', 'EnvChange', (event) => {
       event.stopPropagation();
       setEnvValue(input.dataset.env, input.type === 'checkbox' ? String(input.checked) : input.value);
+      syncSwitchControl(input);
       if (input.type === 'checkbox') {
         saveConfig().catch((error) => {
           pushLocalLog(error.stack || error.message || String(error), 'stderr');
@@ -3430,6 +3830,7 @@ function handleInput(event) {
   const input = closestTarget(event, '[data-env]');
   if (input) {
     setEnvValue(input.dataset.env, input.type === 'checkbox' ? String(input.checked) : input.value);
+    syncSwitchControl(input);
     return;
   }
 
@@ -3446,6 +3847,7 @@ function handleChange(event) {
   const input = closestTarget(event, '[data-env]');
   if (input) {
     setEnvValue(input.dataset.env, input.type === 'checkbox' ? String(input.checked) : input.value);
+    syncSwitchControl(input);
     if (input.type === 'checkbox') {
       saveConfig().catch((error) => {
         pushLocalLog(error.stack || error.message || String(error), 'stderr');
